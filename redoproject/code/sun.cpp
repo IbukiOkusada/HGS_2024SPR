@@ -73,9 +73,12 @@ void CSunTask::Update(void)
 		Rot.z -= D3DX_PI * 2.0f;
 	}
 
-	if (Rot.z * rotOld <= 0.0f)
+	int interbal = (int)(Rot.z * 1000000.0f) / 872;
+	if (interbal % 360 == 0)
 	{
-		CEnemy::Create(D3DXVECTOR3(700.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		float posrandX = (float)(rand() % 4000 - 2000);
+		float posrandZ = (float)(rand() % 4000 - 2000);
+		CEnemy::Create(D3DXVECTOR3(posrandX, 0.0f, posrandZ), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 		for (int nCnt = 0; nCnt < 7; nCnt++)
 		{
