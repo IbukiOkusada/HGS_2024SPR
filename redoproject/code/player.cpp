@@ -50,7 +50,7 @@ namespace {
 	const float INER = (0.3f);		// äµê´
 	const float DAMAGE_APPEAR = (40.0f);
 	const int SETLIFE = (4);
-	const int ADDSCORE = (3);
+	const int ADDSCORE = (1);
 	const int SCOREBOOSTTIME = (300);
 	const int SPEEDBOOSTTIME = (300);
 }

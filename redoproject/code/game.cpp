@@ -36,7 +36,7 @@
 // –³–¼–¼‘O‹óŠÔ‚ð’è‹`
 namespace {
     
-    const int MAX_TIME = (60 * 1);	// Å‘åŽžŠÔ
+    const int MAX_TIME = (90 * 1);	// Å‘åŽžŠÔ
     const int MAX_STRING = (2048);
     const int DEF_PORT = (22333);
     const char* ADDRESSFILE	= "data\\TXT\\address.txt";
@@ -156,7 +156,7 @@ HRESULT CGame::Init(void)
 #endif // _DEBUG
 
     //CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_GAME);
-    CMeshDome::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 15000.0f, 3000.0f, 3, 8, 8);
+    CMeshDome::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 9000.0f, 3000.0f, 3, 8, 8);
 
     m_pSun = CSunTask::Create();
     m_pTimer = CTime::Create(D3DXVECTOR3(550.0f, 100.0f, 0.0f));
