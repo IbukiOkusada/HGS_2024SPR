@@ -11,6 +11,7 @@
 #include "sound.h"
 #include "camera.h"
 #include "texture.h"
+#include "meshdome.h"
 
 //===============================================
 // 無名名前空間
@@ -68,6 +69,7 @@ HRESULT CTitle::Init(void)
 
 	// サウンド再生
 	CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_TITLE);
+	CMeshDome::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 15000.0f, 3000.0f, 3, 8, 8);
 
 	return S_OK;
 }

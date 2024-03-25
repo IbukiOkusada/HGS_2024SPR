@@ -16,6 +16,7 @@
 #include "result.h"
 #include "time.h"
 #include "camera.h"
+#include "meshdome.h"
 
 // マクロ定義
 #define RANKING_FILE	"data\\FILE\\ranking.bin"	// ランキングファイル
@@ -70,6 +71,7 @@ HRESULT CRanking::Init(void)
 
 	sprintf(&aBodyPass[0], "%s\\motion_body%s", FILEPASS, FILEEXT);
 	sprintf(&aLegPass[0], "%s\\motion_leg%s", FILEPASS, FILEEXT);
+	CMeshDome::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 15000.0f, 3000.0f, 3, 8, 8);
 
 	return S_OK;
 }
