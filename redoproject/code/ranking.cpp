@@ -17,6 +17,7 @@
 #include "time.h"
 #include "camera.h"
 #include "meshdome.h"
+#include "fileload.h"
 
 // マクロ定義
 #define RANKING_FILE	"data\\FILE\\ranking.bin"	// ランキングファイル
@@ -57,6 +58,9 @@ HRESULT CRanking::Init(void)
 	int aScore[NUM_RANK] = {};	// スコア格納用
 	m_nRank = -1;	//ランクインしてない状態
 
+		// 外部ファイル読み込みの生成
+	CFileLoad::GetInstance()->OpenFile("data\\TXT\\model.txt");
+
 	// データの読み込み
 	Load(&aScore[0]);
 
@@ -81,6 +85,7 @@ HRESULT CRanking::Init(void)
 //===============================================
 void CRanking::Uninit(void)
 {
+	CFileLoad::Release();
 	CManager::GetInstance()->GetSound()->Stop();
 	CManager::GetInstance()->GetCamera()->SetActive(true);
 	m_nScore = 0;
@@ -153,7 +158,7 @@ void CRanking::Load(int* pScore)
 	 //要素を入れておく
 		for (int nCntRanking = 0; nCntRanking < NUM_RANK; nCntRanking++)
 		{
-			pScore[nCntRanking] = 6000 * 10 + (6000 * nCntRanking);
+			pScore[nCntRanking] = 1000 * 5 + (5000 * nCntRanking);
 		}
 	}
 }
@@ -170,7 +175,7 @@ void CRanking::Sort(int* pScore)
 
 		for (int nCntSec = nCntFst + 1; nCntSec < NUM_RANK; nCntSec++)
 		{
-			if (pScore[nCntSec] < pScore[nTempNum])
+			if (pScore[nCntSec] > pScore[nTempNum])
 			{// 値が大きい場合
 				nTempNum = nCntSec;	// 大きい番号を変更
 			}
@@ -190,7 +195,7 @@ void CRanking::Sort(int* pScore)
 //===============================================
 void CRanking::RankIn(int* pScore, int nRanking)
 {
-	if (nRanking < pScore[NUM_RANK - 1] && nRanking != 0)
+	if (nRanking > pScore[NUM_RANK - 1] && nRanking != 0)
 	{
 		pScore[NUM_RANK - 1] = nRanking;
 

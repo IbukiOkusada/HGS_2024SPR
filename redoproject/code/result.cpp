@@ -18,6 +18,7 @@
 #include "ranking.h"
 #include "object_manager.h"
 #include "time.h"
+#include "fileload.h"
 
 // 静的メンバ変数
 int CResult::m_nScore = 0;
@@ -63,6 +64,9 @@ HRESULT CResult::Init(void)
 		CManager::GetInstance()->GetCamera()->SetViewPort(viewport);
 	}
 
+	// 外部ファイル読み込みの生成
+	CFileLoad::GetInstance()->OpenFile("data\\TXT\\model.txt");
+
 	//CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_RESULT);
 
 	return S_OK;
@@ -73,7 +77,7 @@ HRESULT CResult::Init(void)
 //===============================================
 void CResult::Uninit(void)
 {
-
+	CFileLoad::Release();
 	CRanking::SetScore(m_nScore);
 	m_nScore = 0;
 	CManager::GetInstance()->GetCamera()->SetActive(true);
@@ -87,7 +91,8 @@ void CResult::Update(void)
 {
 
 	if (CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_A, 0) ||
-		CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_START, 0))
+		CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_START, 0) ||
+		CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_RETURN))
 	{
 		CManager::GetInstance()->GetFade()->Set(CScene::MODE_RANKING);
 	}

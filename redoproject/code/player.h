@@ -16,6 +16,7 @@
 class CWaist;
 class CCharacter;
 class CScore;
+class CModel;
 
 // マクロ定義
 #define MAX_ITEM  (1280)  // 所持できるアイテムの最大数
@@ -139,6 +140,7 @@ private:	// 自分だけがアクセス可能
 	int m_nMotion;
 	TYPE m_type;
 	HEADSTATE m_headState;
+	CModel* m_pArrow;
 };
 
 #endif

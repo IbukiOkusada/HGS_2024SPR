@@ -12,6 +12,7 @@
 #include "camera.h"
 #include "texture.h"
 #include "meshdome.h"
+#include "fileload.h"
 
 //===============================================
 // 無名名前空間
@@ -63,6 +64,9 @@ HRESULT CTitle::Init(void)
 	pCamera->SetRotation(D3DXVECTOR3(0.0f, -2.1f, 1.79f));
 	pCamera->SetActive(false);
 
+	// 外部ファイル読み込みの生成
+	CFileLoad::GetInstance()->OpenFile("data\\TXT\\model.txt");
+
 	// 遷移タイマー設定
 	m_nCounterTutorial = MOVE_TUTORIAL;
 	m_nCounterRanking = AUTOMOVE_RANKING;
@@ -79,6 +83,7 @@ HRESULT CTitle::Init(void)
 //===============================================
 void CTitle::Uninit(void)
 {
+	CFileLoad::Release();
 	CManager::GetInstance()->GetSound()->Stop();
 	CCamera* pCamera = CManager::GetInstance()->GetCamera();
 	pCamera->SetActive(true);
@@ -92,7 +97,7 @@ void CTitle::Update(void)
 	CInputPad *pInputPad = CManager::GetInstance()->GetInputPad();
 	CInputKeyboard *pInputKey = CManager::GetInstance()->GetInputKeyboard();
 
-	if (pInputKey->GetTrigger(DIK_RETURN) || pInputPad->GetTrigger(CInputPad::BUTTON_START, 0)) {
+	if (pInputKey->GetTrigger(DIK_RETURN) || pInputPad->GetTrigger(CInputPad::BUTTON_A, 0)) {
 		m_bPush = true;
 	}
 

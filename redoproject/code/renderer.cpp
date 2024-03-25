@@ -12,6 +12,7 @@
 #include "object_manager.h"
 #include "object.h"
 #include "camera.h"
+#include "editor.h"
 
 //===================================================
 // コンストラクタ
@@ -218,6 +219,15 @@ void CRenderer::Draw(void)
 		// オブジェクトの描画
 		CObjectManager::GetInstance()->Draw();
 		CManager::GetInstance()->GetCamera()->SetCamera();
+
+#if _DEBUG	// デバッグ時
+
+		// エディターの描画
+		if (CEditor::GetInstance() != nullptr) {
+			CEditor::GetInstance()->Draw();
+		}
+
+#endif
 
 		// デバッグ表示
 		if (pDebugProc != NULL)
