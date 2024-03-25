@@ -22,6 +22,7 @@ const char* CFlower::m_apModelType[CFlower::TYPE_MAX] = {
 namespace {
 	const float HITLENGTH = (200.0f);
 	const D3DXCOLOR SETCOL = { 1.0f, 1.0f, 1.0f, 1.0f };
+	const int SLEEPTIME = 300;
 }
 
 //==========================================================
@@ -120,7 +121,7 @@ void CFlower::Update(void)
 			break;
 
 		case TYPE_SLEEP:
-			CEnemyManager::GetInstance()->SetSleep(300);
+			CEnemyManager::GetInstance()->SetSleep(SLEEPTIME);
 			break;
 		}
 
