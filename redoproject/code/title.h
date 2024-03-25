@@ -37,6 +37,7 @@ private:
 	CTitleEnter *m_pEnter;
 	CPlayer* m_pPlayer;			// プレイヤーのポインタ
 	CObject2D* m_pLogo;
+	CObject2D* m_pPressA;
 	int m_nCounterTutorial;		// チュートリアル及び人数選択画面遷移タイマー
 	int m_nCounterRanking;		// ランキング自動遷移タイマー
 	bool m_bPush;				// チュートリアル遷移に必要なボタンが押されているか
