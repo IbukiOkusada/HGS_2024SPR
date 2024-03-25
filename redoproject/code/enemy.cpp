@@ -274,8 +274,8 @@ void CEnemy::Move(void)
 	float fSpeed = MOVE;	// 移動量
 
 	//エネミーの更新
-
-	if (CPlayerManager::GetInstance()->GetTop() && m_Info.state != STATE_SLEEP)
+	
+	if (CPlayerManager::GetInstance()->GetTop() && CEnemyManager::GetInstance()->GetSleep() <= 0)
 	{
 		D3DXVECTOR3 posPlayer = CPlayerManager::GetInstance()->GetTop()->GetPosition();
 		D3DXVECTOR3 posEnemy = GetPosition();
@@ -299,6 +299,8 @@ void CEnemy::Move(void)
 		m_Info.move.x += -sinf(GetRotation().y + (D3DX_PI * 0.0f)) * fSpeed;
 		m_Info.move.z += -cosf(GetRotation().y + (D3DX_PI * 0.0f)) * fSpeed;
 	}
+
+	CEnemyManager::GetInstance()->Update();
 }
 
 //===============================================
@@ -324,18 +326,6 @@ void CEnemy::StateSet(void)
 	case STATE_NORMAL:
 	{
 
-	}
-		break;
-
-	case STATE_SLEEP:
-	{
-		m_Info.fStateCounter -= fSlawMul;
-
-		if (m_Info.fStateCounter <= 0.0f)
-		{
-			m_Info.fStateCounter = 0.0f;
-			m_Info.state = STATE_NORMAL;
-		}
 	}
 		break;
 
