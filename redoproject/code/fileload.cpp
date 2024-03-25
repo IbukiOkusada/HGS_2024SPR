@@ -14,6 +14,7 @@
 #include "Xfile.h"
 #include "objectX.h"
 #include "game.h"
+#include "flower.h"
 
 //==========================================================
 // マクロ定義
@@ -41,6 +42,7 @@
 #define LOAD_UPDOWN		"UPDOWN"				// 起伏
 #define LOAD_VTXMAX		"VTXMAX"				// 当たり判定最大
 #define LOAD_VTXMIN		"VTXMIN"				// 当たり判定最小
+#define LOAD_FLOWER		"FLOWERSET"
 
 // 静的メンバ変数宣言
 CFileLoad* CFileLoad::m_pInstance = nullptr;	// インスタンス
@@ -488,6 +490,7 @@ void CFileLoad::LoadModelData(FILE *pFile)
 	float fWidth = 0.0f;	// 幅
 	float fHeight = 0.0f;	// 高さ
 	int nIdx = -1;
+	int nFlower = -1;
 
 	//終了文字まで読み込み
 	while (1)
@@ -514,6 +517,11 @@ void CFileLoad::LoadModelData(FILE *pFile)
 			fscanf(pFile, "%f", &rot.y);	//y座標読み込み
 			fscanf(pFile, "%f", &rot.z);	//z座標読み込み
 		}
+		else if (strcmp(&aStr[0], LOAD_FLOWER) == 0)
+		{//向き
+			fscanf(pFile, "%s", &aStr[0]);	//(=)読み込み
+			fscanf(pFile, "%d", &nFlower);	//x座標読み込み
+		}
 
 		//終了
 		if (strcmp(&aStr[0], ENDMODELSET_TXT) == 0)
@@ -524,6 +532,10 @@ void CFileLoad::LoadModelData(FILE *pFile)
 
 	//フィールドの配置
 	CObjectX::Create(pos, D3DXToRadian(rot), GetModelFileName(nIdx));
+
+	if (nFlower != -1) {
+		CFlower::Create(pos, D3DXToRadian(rot));
+	}
 }
 
 //==========================================================

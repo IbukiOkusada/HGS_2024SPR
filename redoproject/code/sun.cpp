@@ -36,7 +36,7 @@ CSunTask::~CSunTask()
 //==========================================================
 HRESULT CSunTask::Init(void)
 {
-	SunObject = CObjectX::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data/MODEL/30msphere.x", 4);
+	SunObject = CObjectX::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data/MODEL/sun.x", 4);
 
 	Rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 

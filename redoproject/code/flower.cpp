@@ -91,6 +91,10 @@ void CFlower::Update(void)
 
 	CPlayer* pPlayer = CPlayerManager::GetInstance()->GetTop();
 
+	if (pPlayer == nullptr) {
+		return;
+	}
+
 	D3DXVECTOR3 pos = pPlayer->GetPosition();
 
 	// ‹——£‚ðŽæ“¾

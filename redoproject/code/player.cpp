@@ -39,6 +39,7 @@
 #include "camera.h"
 #include "score.h"
 #include "sun.h"
+#include "result.h"
 
 //===============================================
 // 無名名前空間
@@ -95,6 +96,7 @@ CPlayer::CPlayer()
 	m_fSpeedBoost = 0;
 	m_nScoreBoost = 0;
 	m_nScoreUpCounter = 0;
+	m_pArrow = nullptr;
 
 	CPlayerManager::GetInstance()->ListIn(this);
 }
@@ -132,6 +134,10 @@ HRESULT CPlayer::Init(void)
 		m_pBody->GetMotion()->InitSet(m_nMotion);
 		m_pBody->GetParts(0)->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
+
+	m_pArrow = CModel::Create("data\\MODEL\\arrow000.x");
+	m_pArrow->SetParent(&m_Info.mtxWorld);
+	m_pArrow->SetCurrentPosition(D3DXVECTOR3(0.0f, 0.0f, 50.0f));
 
 	// パラメータの設定
 	m_Info.state = STATE_APPEAR;
@@ -431,6 +437,7 @@ void CPlayer::StateSet(void)
 		if (m_Info.fStateCounter <= 0.0f)
 		{
 			m_Info.fStateCounter = DAMAGE_APPEAR;
+			CResult::SetScore(m_pScore->GetScore());
 		}
 	}
 		break;
@@ -635,6 +642,23 @@ void CPlayer::HeadSun(void)
 	D3DXVECTOR3 posPlayer = GetPosition();
 	float rotSunPlayer = atan2f(posPlayer.x - posSun.x, posPlayer.z - posSun.z);
 	float rotSunPlayerDef = rotSunPlayer - GetRotation().y;
+
+	if (m_pArrow != nullptr) {
+		D3DXVECTOR3 ArrowRot = m_Info.rot;
+		ArrowRot.y = rotSunPlayer - ArrowRot.y + -D3DX_PI * 0.5f;
+
+		// 回転補正
+		if (ArrowRot.y > D3DX_PI)
+		{
+			ArrowRot.y -= D3DX_PI * 2.0f;
+		}
+
+		if (ArrowRot.y < -D3DX_PI)
+		{
+			ArrowRot.y += D3DX_PI * 2.0f;
+		}
+		m_pArrow->SetRotation(ArrowRot);
+	}
 
 	// 回転補正
 	if (rotSunPlayerDef > D3DX_PI)

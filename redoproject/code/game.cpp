@@ -30,11 +30,13 @@
 #include "sun.h"
 #include "time.h"
 #include "flower.h"
+#include "result.h"
+#include "editor.h"
 
 // 無名名前空間を定義
 namespace {
     
-    const int MAX_TIME = (60 * 2);	// 最大時間
+    const int MAX_TIME = (10 * 1);	// 最大時間
     const int MAX_STRING = (2048);
     const int DEF_PORT = (22333);
     const char* ADDRESSFILE	= "data\\TXT\\address.txt";
@@ -148,10 +150,13 @@ HRESULT CGame::Init(void)
         break;
     }
 
+#ifdef _DEBUG
+    // エディターの生成
+    CEditor::Create();
+#endif // _DEBUG
 
     //CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_GAME);
     CMeshDome::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 15000.0f, 3000.0f, 3, 8, 8);
-    CFlower::Create(D3DXVECTOR3(400.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
     m_pSun = CSunTask::Create();
     m_pTimer = CTime::Create(D3DXVECTOR3(550.0f, 100.0f, 0.0f));
@@ -227,6 +232,7 @@ void CGame::Update(void)
         m_pTimer->Update();
 
         if (m_pTimer->GetNum() >= MAX_TIME) {
+            CResult::SetScore(m_pScore->GetScore());
             CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
         }
     }
