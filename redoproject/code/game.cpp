@@ -250,6 +250,7 @@ void CGame::Update(void)
 
         if (m_pTimer->GetNum() >= MAX_TIME) {
             CResult::SetScore(m_pScore->GetScore());
+            CResult::SetType(CResult::TYPE_MULTI_WIN);
             CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
         }
     }

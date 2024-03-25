@@ -22,7 +22,7 @@ const char* CFlower::m_apModelType[CFlower::TYPE_MAX] = {
 namespace {
 	const float HITLENGTH = (200.0f);
 	const D3DXCOLOR SETCOL = { 1.0f, 1.0f, 1.0f, 1.0f };
-	const int SLEEPTIME = 300;
+	const int SLEEPTIME = 60;
 }
 
 //==========================================================

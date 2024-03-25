@@ -40,6 +40,7 @@
 #include "score.h"
 #include "sun.h"
 #include "result.h"
+#include "particle.h"
 
 //===============================================
 // ñ≥ñºñºëOãÛä‘
@@ -631,6 +632,8 @@ void CPlayer::AddScore(void){
 
 	// â¡éZ
 	m_pScore->AddScore(ADDSCORE + m_nScoreBoost);
+	D3DXVECTOR3 pos = { m_pBody->GetParts(0)->GetMtx()->_41,m_pBody->GetParts(0)->GetMtx()->_42, m_pBody->GetParts(0)->GetMtx()->_43 };
+	CParticle::Create(pos, CEffect::TYPE_FLOWERING);
 }
 //===============================================
 // äJâ‘èÛë‘ê›íË
@@ -708,6 +711,7 @@ void CPlayer::Damage(void)
 
 	if (m_nLife <= 0) {
 		m_Info.state = STATE_DEATH;
+		CResult::SetType(CResult::TYPE_MULTI_LOSE);
 	}
 }
 
