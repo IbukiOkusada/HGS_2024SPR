@@ -36,7 +36,7 @@
 // 無名名前空間を定義
 namespace {
     
-    const int MAX_TIME = (10 * 1);	// 最大時間
+    const int MAX_TIME = (60 * 1);	// 最大時間
     const int MAX_STRING = (2048);
     const int DEF_PORT = (22333);
     const char* ADDRESSFILE	= "data\\TXT\\address.txt";
@@ -204,6 +204,9 @@ void CGame::Uninit(void)
         m_pTimer = nullptr;
     }
 
+    // エディター
+    CEditor::Release();
+
     CFileLoad::Release();
 
     // defaultカメラオン
@@ -220,6 +223,20 @@ void CGame::Uninit(void)
 //===============================================
 void CGame::Update(void)
 {
+// エディター更新
+#if _DEBUG	// デバッグ時
+
+     // エディターの描画
+    if (CEditor::GetInstance() != nullptr) {
+        CEditor::GetInstance()->Update();
+
+        if (CEditor::GetInstance()->GetActive()) {
+            return;
+        }
+    }
+
+#endif
+
     CInputPad *pInputPad = CManager::GetInstance()->GetInputPad();
     CInputKeyboard *pInputKey = CManager::GetInstance()->GetInputKeyboard();
 

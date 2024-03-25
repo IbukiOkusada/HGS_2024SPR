@@ -71,12 +71,12 @@ CEditor::~CEditor()
 //==========================================================
 void CEditor::Init(void)
 {
-	if (CManager::GetInstance()->GetScene()->GetFileLoad() == NULL)
+	if (CFileLoad::GetInstance() == NULL)
 	{
 		return;
 	}
 
-	m_Object.nIdxModel = CManager::GetInstance()->GetModelFile()->Regist(CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelFileName(m_nIdx));
+	m_Object.nIdxModel = CManager::GetInstance()->GetModelFile()->Regist(CFileLoad::GetInstance()->GetModelFileName(m_nIdx));
 }
 
 //==========================================================
@@ -92,7 +92,7 @@ void CEditor::Uninit(void)
 //==========================================================
 void CEditor::Update(void)
 {
-	if (CManager::GetInstance()->GetScene()->GetFileLoad() == NULL)
+	if (CFileLoad::GetInstance() == NULL)
 	{
 		return;
 	}
@@ -243,19 +243,19 @@ void CEditor::Update(void)
 	//設置
 	if (pInputKey->GetTrigger(DIK_RETURN))
 	{
-		CObjectX::Create(pos, rot, CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelFileName(m_nIdx));
+		CObjectX::Create(pos, rot, CFileLoad::GetInstance()->GetModelFileName(m_nIdx));
 	}
 
 	//設置物変更
 	if (pInputKey->GetTrigger(DIK_LSHIFT))
 	{
-		m_nIdx = (m_nIdx + 1) % CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelNumAll();
-		m_Object.nIdxModel = CManager::GetInstance()->GetModelFile()->Regist(CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelFileName(m_nIdx));
+		m_nIdx = (m_nIdx + 1) % CFileLoad::GetInstance()->GetModelNumAll();
+		m_Object.nIdxModel = CManager::GetInstance()->GetModelFile()->Regist(CFileLoad::GetInstance()->GetModelFileName(m_nIdx));
 	}
 	else if (pInputKey->GetTrigger(DIK_LCONTROL))
 	{
-		m_nIdx = (m_nIdx - 1 + CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelNumAll()) % CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelNumAll();
-		m_Object.nIdxModel = CManager::GetInstance()->GetModelFile()->Regist(CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelFileName(m_nIdx));
+		m_nIdx = (m_nIdx - 1 + CFileLoad::GetInstance()->GetModelNumAll()) % CFileLoad::GetInstance()->GetModelNumAll();
+		m_Object.nIdxModel = CManager::GetInstance()->GetModelFile()->Regist(CFileLoad::GetInstance()->GetModelFileName(m_nIdx));
 	}
 
 	//回転
@@ -454,7 +454,7 @@ void CEditor::Save(void)
 
 			// ファイル読み込みモデルの番号取得
 			char *pChar = CManager::GetInstance()->GetModelFile()->GetFileName(nType);
-			nType = CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelNum(pChar);
+			nType = CFileLoad::GetInstance()->GetModelNum(pChar);
 
 			if (nType == -1)
 			{
