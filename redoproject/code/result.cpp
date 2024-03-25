@@ -19,9 +19,14 @@
 #include "object_manager.h"
 #include "time.h"
 #include "fileload.h"
+#include "player.h"
+#include "character.h"
+#include "motion.h"
+#include "model.h"
 
 // 静的メンバ変数
 int CResult::m_nScore = 0;
+CResult::TYPE CResult::m_type = CResult::TYPE_MAX;
 
 //===============================================
 // コンストラクタ
@@ -46,12 +51,12 @@ CResult::~CResult()
 //===============================================
 HRESULT CResult::Init(void)
 {
-
 	//カメラ初期化
 	{
 		CManager::GetInstance()->GetCamera()->SetLength(300.0f);
-		CManager::GetInstance()->GetCamera()->SetRotation(D3DXVECTOR3(1.0f, -D3DX_PI * 0.5f, 2.63f));
-		CManager::GetInstance()->GetCamera()->SetPositionR(D3DXVECTOR3(0.0f, 137.77f, -301.94f));
+		CManager::GetInstance()->GetCamera()->SetRotation(D3DXVECTOR3(1.0f, -1.5f, 1.5f));
+		CManager::GetInstance()->GetCamera()->SetPositionR(D3DXVECTOR3(0.0f, 127.77f, -301.94f));
+		CManager::GetInstance()->GetCamera()->SetPositionV(D3DXVECTOR3(0.0f, 107.77f, -601.94f));
 		D3DVIEWPORT9 viewport;
 
 		//プレイヤー追従カメラの画面位置設定
@@ -67,6 +72,34 @@ HRESULT CResult::Init(void)
 	// 外部ファイル読み込みの生成
 	CFileLoad::GetInstance()->OpenFile("data\\TXT\\model.txt");
 
+	// 下半身の設定
+	m_pLeg = CCharacter::Create("data\\TXT\\motion_playerbody.txt");
+	m_pLeg->Init();
+	m_pLeg->SetPosition({ 0.0f, 0.0f, 0.0f });
+
+	if (m_pLeg->GetMotion() != nullptr)
+	{
+		m_pLeg->GetMotion()->InitSet(0);
+	}
+
+	// 胴体の設定
+	m_pBody = CCharacter::Create("data\\TXT\\motion_sunflowerman.txt");
+	m_pBody->SetParent(m_pLeg->GetParts(2)->GetMtx());
+
+	if (m_pBody->GetMotion() != nullptr)
+	{
+		// 初期モーションの設定
+		if (m_type == TYPE_MULTI_WIN)
+		{
+			m_pBody->GetMotion()->InitSet(1);
+		}
+		else
+		{
+			m_pBody->GetMotion()->InitSet(2);
+		}
+		m_pBody->GetParts(0)->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	}
+
 	//CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_RESULT);
 
 	return S_OK;
@@ -77,6 +110,20 @@ HRESULT CResult::Init(void)
 //===============================================
 void CResult::Uninit(void)
 {
+	// 胴体の終了
+	if (m_pBody != nullptr) {
+		m_pBody->Uninit();
+		delete m_pBody;
+		m_pBody = nullptr;
+	}
+
+	// 下半身の終了
+	if (m_pLeg != nullptr) {
+		m_pLeg->Uninit();
+		delete m_pLeg;
+		m_pLeg = nullptr;
+	}
+
 	CFileLoad::Release();
 	CRanking::SetScore(m_nScore);
 	m_nScore = 0;
@@ -95,6 +142,18 @@ void CResult::Update(void)
 		CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_RETURN))
 	{
 		CManager::GetInstance()->GetFade()->Set(CScene::MODE_RANKING);
+	}
+
+	// 下半身更新
+	if (m_pLeg != nullptr)
+	{// 使用されている場合
+		m_pLeg->Update();
+	}
+
+	// 胴体更新
+	if (m_pBody != nullptr)
+	{// 使用されている場合
+		m_pBody->Update();
 	}
 
 	CScene::Update();

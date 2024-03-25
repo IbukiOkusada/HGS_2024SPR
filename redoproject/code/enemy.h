@@ -101,6 +101,7 @@ public:	// 誰でもアクセス可能
 	D3DXVECTOR3 GetOldPosition(void) { return m_Info.posOld; }
 	CEnemy* GetNext(void) { return m_pNext; }
 	CEnemy* GetPrev(void) { return m_pPrev; }
+	int GetId(void) { return m_nId; }
 
 private:	// 自分だけがアクセス可能
 
@@ -113,6 +114,7 @@ private:	// 自分だけがアクセス可能
 	void BodySet(void);
 	bool BodyCheck(CCharacter* pBody);
 	void Damage(void);
+	void Collision(void);
 
 	// メンバ変数
 	CEnemy *m_pPrev;			// 前のオブジェクトへのポインタ

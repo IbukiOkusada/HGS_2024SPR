@@ -711,6 +711,7 @@ void CPlayer::Damage(void)
 
 	if (m_nLife <= 0) {
 		m_Info.state = STATE_DEATH;
+		CResult::SetType(CResult::TYPE_MULTI_LOSE);
 	}
 }
 
