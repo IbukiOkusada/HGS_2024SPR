@@ -279,7 +279,7 @@ void CEnemy::Move(void)
 	{
 		D3DXVECTOR3 posPlayer = CPlayerManager::GetInstance()->GetTop()->GetPosition();
 		D3DXVECTOR3 posEnemy = GetPosition();
-		float rotDef, rotPlayer;
+		float rotPlayer;
 
 		rotPlayer = atan2f(posEnemy.x - posPlayer.x, posEnemy.z - posPlayer.z);
 
