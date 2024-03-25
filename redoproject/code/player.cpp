@@ -26,6 +26,7 @@
 #include "billboard.h"
 #include "character.h"
 #include "motion.h"
+#include "waist.h"
 #include "sound.h"
 #include "model.h"
 #include "particle.h"
@@ -36,6 +37,7 @@
 #include "fade.h"
 #include "camera_manager.h"
 #include "camera.h"
+#include "score.h"
 #include "sun.h"
 
 //===============================================
@@ -46,6 +48,14 @@ namespace {
 	const float ROT_MULTI = (0.1f);	// 向き補正倍率
 	const float INER = (0.3f);		// 慣性
 	const float DAMAGE_APPEAR = (40.0f);
+	const int SETLIFE = (4);
+	const int ADDSCORE = (3);
+}
+
+namespace PLAYER
+{
+	const D3DXVECTOR3 COLLIMAX = { 20.0f, 70.0f, 20.0f };	// 最大当たり判定
+	const D3DXVECTOR3 COLLIMIN = { -20.0f, 0.0f, -20.0f };	// 最小当たり判定
 }
 
 // 前方宣言
@@ -76,6 +86,9 @@ CPlayer::CPlayer()
 	m_type = TYPE_NONE;
 	m_nId = -1;
 	m_bMove = false;
+	m_pScore = nullptr;
+	m_nLife = 0;
+	m_headState = HEADSTATE_NORMAL;
 
 	CPlayerManager::GetInstance()->ListIn(this);
 }
@@ -93,11 +106,32 @@ CPlayer::~CPlayer()
 //===============================================
 HRESULT CPlayer::Init(void)
 {
-	// 腰の生成
+	// 下半身の設定
+	m_pLeg = CCharacter::Create("data\\TXT\\motion_playerbody.txt");
+	m_pLeg->SetParent(&m_Info.mtxWorld);
 
+	if (m_pLeg->GetMotion() != nullptr)
+	{
+		// 初期モーションの設定
+		m_pLeg->GetMotion()->InitSet(m_nMotion);
+	}
+
+	// 胴体の設定
+	m_pBody = CCharacter::Create("data\\TXT\\motion_bee.txt");
+	m_pBody->SetParent(m_pLeg->GetParts(2)->GetMtx());
+
+	if (m_pBody->GetMotion() != nullptr)
+	{
+		// 初期モーションの設定
+		m_pBody->GetMotion()->InitSet(m_nMotion);
+		m_pBody->GetParts(0)->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	}
+
+	// パラメータの設定
 	m_Info.state = STATE_APPEAR;
 	m_type = TYPE_NONE;
-	
+	m_headState = HEADSTATE_FLOWERING;
+	m_nLife = SETLIFE;
 
 	return S_OK;
 }
@@ -117,8 +151,21 @@ HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 //===============================================
 void CPlayer::Uninit(void)
 {
-
 	CPlayerManager::GetInstance()->ListOut(this);
+
+	// 胴体の終了
+	if (m_pBody != nullptr) {
+		m_pBody->Uninit();
+		delete m_pBody;
+		m_pBody = nullptr;
+	}
+
+	// 下半身の終了
+	if (m_pLeg != nullptr) {
+		m_pLeg->Uninit();
+		delete m_pLeg;
+		m_pLeg = nullptr;
+	}
 
 	// 廃棄
 	Release();
@@ -134,7 +181,6 @@ void CPlayer::Update(void)
 
 	StateSet();	
 
-	
 	{
 		
 		// プレイヤー操作
@@ -147,7 +193,9 @@ void CPlayer::Update(void)
 	
 	// カメラの追従
 	CManager::GetInstance()->GetCamera()->Update();
-	CManager::GetInstance()->GetCamera()->Pursue(GetPosition(), GetRotation(), CManager::GetInstance()->GetCamera()->GetLength());
+	D3DXVECTOR3 pos = GetPosition();
+	pos.y += 70.0f;
+	CManager::GetInstance()->GetCamera()->Pursue(pos, GetRotation(), CManager::GetInstance()->GetCamera()->GetLength());
 
 	D3DXVECTOR3 posSun = CManager::GetInstance()->GetScene()->GetSun()->GetSunObject()->GetPosition();
 	D3DXVECTOR3 posPlayer = GetPosition();
@@ -167,6 +215,10 @@ void CPlayer::Update(void)
 	}
 
 	SetMatrix();
+	BodySet();
+
+	// スコア設定
+	AddScore();
 }
 
 //===============================================
@@ -224,7 +276,18 @@ void CPlayer::Controller(void)
 	pos.x += m_Info.move.x * fSlow;
 	pos.z += m_Info.move.z * fSlow;
 
+	// 当たり判定
+	{
+		D3DXVECTOR3 vtxMax = PLAYER::COLLIMAX;
+		D3DXVECTOR3 vtxMin = PLAYER::COLLIMIN;
+		D3DXVECTOR3 vtxMaxOld = vtxMax;
+		D3DXVECTOR3 vtxMinOld = vtxMin;
+		CObjectX::COLLISION_AXIS ColiAxis = CObjectX::TYPE_MAX;	// 当たっている方向をリセット
+		CObjectX::Collision(pos, m_Info.posOld, m_Info.move, vtxMin, vtxMax, vtxMinOld, vtxMaxOld, ColiAxis);
+	}
+
 	SetPosition(pos);
+	SetRotation(m_Info.rot);
 }
 
 //===============================================
@@ -478,4 +541,55 @@ void CPlayer::Adjust(void)
 			break;
 		}
 	}
+}
+
+//===============================================
+// 使用階層構造の設定
+//===============================================
+void CPlayer::BodySet(void)
+{
+	// 下半身更新
+	if (BodyCheck(m_pLeg))
+	{// 使用されている場合
+		m_pLeg->Update();
+	}
+
+	// 胴体更新
+	if (BodyCheck(m_pBody))
+	{// 使用されている場合
+		m_pBody->Update();
+	}
+}
+
+//===============================================
+// 体使用確認
+//===============================================
+bool CPlayer::BodyCheck(CCharacter* pBody)
+{
+	if (pBody == nullptr) {	// 使用されている
+		return false;
+	}
+
+	if (pBody->GetMotion() == nullptr) {	// モーションも使用されている
+		return false;
+	}
+
+	return true;
+}
+
+//===============================================
+// スコア加算
+//===============================================
+void CPlayer::AddScore(void){
+
+	if (m_pScore == nullptr) {	// スコアがない
+		return;
+	}
+
+	if (m_headState != HEADSTATE_FLOWERING) {	// 開花していない
+		return;
+	}
+
+	// 加算
+	m_pScore->AddScore(ADDSCORE);
 }
