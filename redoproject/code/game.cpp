@@ -24,6 +24,7 @@
 #include <assert.h>
 #include "ranking.h"
 #include "meshdome.h"
+#include "sun.h"
 
 // –³–¼–¼‘O‹óŠÔ‚ð’è‹`
 namespace {
@@ -191,6 +192,7 @@ HRESULT CGame::Init(void)
 
     //CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_GAME);
     CMeshDome::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 15000.0f, 3000.0f, 3, 8, 8);
+    CSunTask::Create();
 
     return S_OK;
 }
