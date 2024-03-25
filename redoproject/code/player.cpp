@@ -739,6 +739,8 @@ void CPlayer::Damage(void)
 	else {
 		m_pLife->SetIdx(m_nLife);
 	}
+
+	CManager::GetInstance()->GetSound()->Play(CSound::LABEL_SE_DAMAGE);
 }
 
 //===============================================

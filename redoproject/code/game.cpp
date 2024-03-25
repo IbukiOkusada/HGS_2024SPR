@@ -158,6 +158,7 @@ HRESULT CGame::Init(void)
     //CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_GAME);
     CMeshDome::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 9000.0f, 3000.0f, 3, 8, 8);
 
+    CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_GAME);
     m_pSun = CSunTask::Create();
     m_pTimer = CTime::Create(D3DXVECTOR3(550.0f, 100.0f, 0.0f));
     m_pTimer->Set(0);

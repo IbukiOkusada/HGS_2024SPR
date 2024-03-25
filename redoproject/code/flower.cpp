@@ -11,6 +11,7 @@
 #include "player.h"
 #include "player_manager.h"
 #include "enemy_manager.h"
+#include "sound.h"
 
 // Ã“Iƒƒ“ƒo•Ï”
 const char* CFlower::m_apModelType[CFlower::TYPE_MAX] = {
@@ -127,6 +128,7 @@ void CFlower::Update(void)
 
 		if (m_pModel != nullptr) {
 			m_pModel->ChangeCol(false);
+			CManager::GetInstance()->GetSound()->Play(CSound::LABEL_SE_GET);
 		}
 	}
 }

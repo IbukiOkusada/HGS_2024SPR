@@ -100,6 +100,7 @@ HRESULT CResult::Init(void)
 		m_pBody->GetParts(0)->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 
+	CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_RESULT);
 	//CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_RESULT);
 
 	return S_OK;
@@ -142,7 +143,7 @@ void CResult::Update(void)
 		CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_START, 0) ||
 		CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_RETURN))
 	{
-		CManager::GetInstance()->GetFade()->Set(CScene::MODE_RANKING);
+		CManager::GetInstance()->GetFade()->Set(CScene::MODE_TITLE);
 	}
 
 	// ‰º”¼gXV

@@ -77,6 +77,7 @@ CTutorial::~CTutorial()
 //===============================================
 HRESULT CTutorial::Init(void)
 {
+	CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_TUTORIAL);
 	return S_OK;
 }
 
