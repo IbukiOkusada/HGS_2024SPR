@@ -92,6 +92,10 @@ void CFlower::Update(void)
 	CPlayer* pPlayer = CPlayerManager::GetInstance()->GetTop();
 
 	if (pPlayer == nullptr) {
+		m_bHit = true;
+		if (m_pModel != nullptr) {
+			m_pModel->ChangeCol(false);
+		}
 		return;
 	}
 

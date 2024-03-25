@@ -67,7 +67,7 @@ public:
 
 	// メンバ関数(ポインタ)
 	CPlayer *GetPlayer(void);
-	CFileLoad *GetFileLoad(void);
+	CFileLoad *GetFileLoad(void) override;
 
 private:
 
