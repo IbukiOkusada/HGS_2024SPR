@@ -39,12 +39,14 @@
 #include "camera.h"
 #include "score.h"
 #include "sun.h"
+#include "player.h"
+#include "player_manager.h"
 
 //===============================================
 // 無名名前空間
 //===============================================
 namespace {
-	const float MOVE = (1.5f);	// 移動量
+	const float MOVE = (1.0f);	// 移動量
 	const float ROT_MULTI = (0.1f);	// 向き補正倍率
 	const float INER = (0.3f);		// 慣性
 	const float DAMAGE_APPEAR = (40.0f);
@@ -272,7 +274,31 @@ void CEnemy::Move(void)
 	float fSpeed = MOVE;	// 移動量
 
 	//エネミーの更新
-	
+
+	if (CPlayerManager::GetInstance()->GetTop())
+	{
+		D3DXVECTOR3 posPlayer = CPlayerManager::GetInstance()->GetTop()->GetPosition();
+		D3DXVECTOR3 posEnemy = GetPosition();
+		float rotDef, rotPlayer;
+
+		rotPlayer = atan2f(posEnemy.x - posPlayer.x, posEnemy.z - posPlayer.z);
+
+		// 回転補正
+		if (rotPlayer > D3DX_PI)
+		{
+			rotPlayer -= D3DX_PI * 2.0f;
+		}
+
+		if (rotPlayer < -D3DX_PI)
+		{
+			rotPlayer += D3DX_PI * 2.0f;
+		}
+
+		m_fRotDest = rotPlayer;
+
+		m_Info.move.x += -sinf(GetRotation().y + (D3DX_PI * 0.0f)) * fSpeed;
+		m_Info.move.z += -cosf(GetRotation().y + (D3DX_PI * 0.0f)) * fSpeed;
+	}
 }
 
 //===============================================

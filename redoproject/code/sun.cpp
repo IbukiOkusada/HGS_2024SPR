@@ -5,6 +5,7 @@
 //
 //==========================================================
 #include "sun.h"
+#include "enemy.h"
 
 // ƒ}ƒNƒ’è‹`
 #define SUN_SPEED (0.004f)	//‘¾—z‚Ì‰ñ“]‘¬“x
@@ -55,6 +56,7 @@ void CSunTask::Update(void)
 	// ‘¾—z‚ÌˆÊ’uŒˆ’è
 	D3DXVECTOR3 SunPos;
 	SunPos = PosRelativeMtx(D3DXVECTOR3(0.0f, 0.0f, 0.0f), Rot, D3DXVECTOR3(13000.0f, 0.0f, 0.0f));
+	float rotOld = Rot.z;
 
 	// ‰ñ“]‚³‚¹‚é
 	Rot.x = SUN_ANGLE;
@@ -64,6 +66,11 @@ void CSunTask::Update(void)
 	if (Rot.z > D3DX_PI)
 	{
 		Rot.z -= D3DX_PI * 2.0f;
+	}
+
+	if (Rot.z * rotOld <= 0.0f)
+	{
+		CEnemy::Create(D3DXVECTOR3(700.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 
 	// ˆÊ’u‘ã“ü
