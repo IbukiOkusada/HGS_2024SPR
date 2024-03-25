@@ -114,6 +114,7 @@ private:	// 自分だけがアクセス可能
 	void BodySet(void);
 	bool BodyCheck(CCharacter* pBody);
 	void AddScore(void);
+	void Damage(void);
 	void HeadSun(void);
 
 	// メンバ変数

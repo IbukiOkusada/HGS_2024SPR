@@ -20,6 +20,7 @@ class CMeshDome;
 class CPause;
 class CScore;
 class CSunTask;
+class CTime;
 
 // É}ÉNÉçíËã`
 #define NUM_FILTER	(2)
