@@ -301,22 +301,6 @@ void CPlayer::StateSet(void)
 		if (m_Info.fStateCounter <= 0.0f)
 		{
 			m_Info.fStateCounter = DAMAGE_APPEAR;
-			m_Info.state = STATE_SPAWN;
-		}
-	}
-		break;
-
-	case STATE_SPAWN:
-	{
-		m_Info.fStateCounter -= fSlawMul;
-
-		if (m_Info.fStateCounter <= 0.0f)
-		{
-			m_Info.fStateCounter = SPAWN_INTERVAL;
-			m_Info.state = STATE_APPEAR;
-
-			// 煙のパーティクル生成
-			CParticle::Create(m_Info.pos, CEffect::TYPE_SMAKE);
 		}
 	}
 		break;
