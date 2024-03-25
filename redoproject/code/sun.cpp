@@ -7,6 +7,8 @@
 #include "sun.h"
 
 // ƒ}ƒNƒ’è‹`
+#define SUN_SPEED (0.004f)	//‘¾—z‚Ì‰ñ“]‘¬“x
+#define SUN_ANGLE (1.48f)	//‘¾—z‚ÌŽ²‚É‘Î‚·‚éŠp“x
 
 //==========================================================
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
@@ -55,9 +57,8 @@ void CSunTask::Update(void)
 	SunPos = PosRelativeMtx(D3DXVECTOR3(0.0f, 0.0f, 0.0f), Rot, D3DXVECTOR3(13000.0f, 0.0f, 0.0f));
 
 	// ‰ñ“]‚³‚¹‚é
-	Rot.x = 1.48f;
-	Rot.y += 0.0f;
-	Rot.z += 0.01f;
+	Rot.x = SUN_ANGLE;
+	Rot.z += SUN_SPEED;
 
 	// ‰ñ“]•â³
 	if (Rot.z > D3DX_PI)
