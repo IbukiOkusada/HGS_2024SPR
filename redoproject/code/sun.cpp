@@ -57,7 +57,7 @@ void CSunTask::Update(void)
 	// ‰ñ“]‚³‚¹‚é
 	Rot.x = 1.48f;
 	Rot.y += 0.0f;
-	Rot.z += 0.001f;
+	Rot.z += 0.01f;
 
 	// ‰ñ“]•â³
 	if (Rot.z > D3DX_PI)

@@ -197,25 +197,11 @@ void CPlayer::Update(void)
 	pos.y += 70.0f;
 	CManager::GetInstance()->GetCamera()->Pursue(pos, GetRotation(), CManager::GetInstance()->GetCamera()->GetLength());
 
-	D3DXVECTOR3 posSun = CManager::GetInstance()->GetScene()->GetSun()->GetSunObject()->GetPosition();
-	D3DXVECTOR3 posPlayer = GetPosition();
-	float rotSunPlayer = atan2f(posPlayer.x - posSun.x, posPlayer.z - posSun.z);
-
-	CManager::GetInstance()->GetDebugProc()->Print("太陽との角度[%f]\n", rotSunPlayer);
-	CManager::GetInstance()->GetDebugProc()->Print("プレイヤーの角度[%f, %f, %f]\n", GetRotation().x, GetRotation().y, GetRotation().z);
-	CManager::GetInstance()->GetDebugProc()->Print("太陽との角度差[%f]\n", rotSunPlayer - GetRotation().y);
-
-	if (rotSunPlayer - GetRotation().y < 1.0f && rotSunPlayer - GetRotation().y > -1.0f)
-	{
-		CManager::GetInstance()->GetDebugProc()->Print("プレイヤーの状態[開花]\n");
-	}
-	else
-	{
-		CManager::GetInstance()->GetDebugProc()->Print("プレイヤーの状態[通常]\n");
-	}
-
 	SetMatrix();
 	BodySet();
+
+	// 開花状態設定
+	HeadSun();
 
 	// スコア設定
 	AddScore();
@@ -592,4 +578,43 @@ void CPlayer::AddScore(void){
 
 	// 加算
 	m_pScore->AddScore(ADDSCORE);
+}
+
+//===============================================
+// 開花状態設定
+//===============================================
+void CPlayer::HeadSun(void)
+{
+	// 各変数
+	D3DXVECTOR3 posSun = CManager::GetInstance()->GetScene()->GetSun()->GetSunObject()->GetPosition();
+	D3DXVECTOR3 posPlayer = GetPosition();
+	float rotSunPlayer = atan2f(posPlayer.x - posSun.x, posPlayer.z - posSun.z);
+	float rotSunPlayerDef = rotSunPlayer - GetRotation().y;
+
+	// 回転補正
+	if (rotSunPlayerDef > D3DX_PI)
+	{
+		rotSunPlayerDef -= D3DX_PI * 2.0f;
+	}
+
+	if (rotSunPlayerDef < -D3DX_PI)
+	{
+		rotSunPlayerDef += D3DX_PI * 2.0f;
+	}
+
+	CManager::GetInstance()->GetDebugProc()->Print("太陽との角度[%f]\n", rotSunPlayer);
+	CManager::GetInstance()->GetDebugProc()->Print("プレイヤーの角度[%f, %f, %f]\n", GetRotation().x, GetRotation().y, GetRotation().z);
+	CManager::GetInstance()->GetDebugProc()->Print("太陽との角度差[%f]\n", rotSunPlayerDef);
+
+	// 角度の差が一定値以内で開花状態に
+	if (rotSunPlayerDef < 0.7f && rotSunPlayerDef > -0.7f)
+	{
+		m_headState = HEADSTATE_FLOWERING;
+		CManager::GetInstance()->GetDebugProc()->Print("プレイヤーの状態[開花]\n");
+	}
+	else
+	{
+		m_headState = HEADSTATE_NORMAL;
+		CManager::GetInstance()->GetDebugProc()->Print("プレイヤーの状態[通常]\n");
+	}
 }
