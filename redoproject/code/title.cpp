@@ -122,10 +122,6 @@ void CTitle::Update(void)
 		}
 	}
 	else {
-		m_nCounterRanking--;
-		if (m_nCounterRanking <= 0) {
-			CManager::GetInstance()->GetFade()->Set(CScene::MODE_RANKING);
-		}
 	}
 
 	CScene::Update();

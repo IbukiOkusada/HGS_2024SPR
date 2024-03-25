@@ -13,7 +13,11 @@
 const CSound::SOUNDINFO CSound::m_aSoundInfo[LABEL_MAX] =
 {
 	{ "data/BGM/title.wav", -1 },		// BGMタイトル
-	//{ "data/SE/coin00.wav", 0 },		// Enter
+	{ "data/BGM/tutorial.wav", -1 },		// BGMタイトル
+	{ "data/BGM/game.wav", -1 },		// BGMタイトル
+	{ "data/BGM/result.wav", -1 },		// BGMタイトル
+	{ "data/SE/get.wav", 0 },		// Enter
+	{ "data/SE/damage.wav", 0 },		// Enter
 };										
 
 //=============================================================================

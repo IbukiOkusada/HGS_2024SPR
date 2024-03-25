@@ -74,6 +74,7 @@ CTutorial::~CTutorial()
 //===============================================
 HRESULT CTutorial::Init(void)
 {
+	CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_TUTORIAL);
 	// ƒƒS‚Ì•`‰æ
 	m_pObject2D = CObject2D::Create({ 640.0f, 360.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 7);
 	m_pObject2D->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\tutorial000.png"));
