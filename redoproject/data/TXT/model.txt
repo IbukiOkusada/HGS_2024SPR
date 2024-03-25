@@ -24,7 +24,7 @@ NUM_MODEL = 1
 #------------------------------------------------------------------------------
 # モデルファイル名
 #------------------------------------------------------------------------------
-MODEL_FILENAME = data/MODEL/1mcube.x	# [0]砂場
+MODEL_FILENAME = data/MODEL/flower_bed.x	# [0]砂場
 
 # 床配置情報
 
@@ -38,5 +38,11 @@ FIELDSET
 END_FIELDSET
 
 # モデル配置
+MODELSET
+	TYPE = 0
+	POS = 0.0 0.0 0.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
