@@ -88,7 +88,19 @@ void CFlower::Update(void)
 
 	CPlayer* pPlayer = CPlayerManager::GetInstance()->GetTop();
 
+	D3DXVECTOR3 pos = pPlayer->GetPosition();
 
+	// 距離を取得
+	float fLength = sqrtf((pos.x - m_pos.x) * (pos.x - m_pos.x)
+		+ (pos.z - m_pos.z) * (pos.z - m_pos.z));
+
+	// 追跡確認
+	if (fLength < HITLENGTH) {	// 現在見ているプレイヤーの方が近い場合
+		m_bHit = true;
+		if (m_pModel != nullptr) {
+			m_pModel->ChangeCol(false);
+		}
+	}
 }
 
 //==========================================================
