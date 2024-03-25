@@ -197,6 +197,9 @@ void CPlayer::Controller(void)
 		Move();
 	}
 
+	// Œü‚«Ý’è
+	Adjust();
+
 	m_Info.move.x += (0.0f - m_Info.move.x) * 0.12f;	//xÀ•W
 	m_Info.move.z += (0.0f - m_Info.move.z) * 0.12f;	//xÀ•W
 
@@ -390,4 +393,71 @@ void CPlayer::SetMotion(int nMotion) {
 void CPlayer::SetDraw(bool bDraw)
 {
 	
+}
+
+//===============================================
+// ’²®
+//===============================================
+void CPlayer::Adjust(void)
+{
+	while (1)
+	{
+		if (m_fRotDest > D3DX_PI || m_fRotDest < -D3DX_PI)
+		{//-3.14`3.14‚Ì”ÍˆÍŠO‚Ìê‡
+			if (m_fRotDest > D3DX_PI)
+			{
+				m_fRotDest += (-D3DX_PI * 2);
+			}
+			else if (m_fRotDest < -D3DX_PI)
+			{
+				m_fRotDest += (D3DX_PI * 2);
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	m_fRotDiff = m_fRotDest - m_fRotMove;	//–Ú•W‚Ü‚Å‚ÌˆÚ“®•ûŒü‚Ì·•ª
+
+	while (1)
+	{
+		if (m_fRotDiff > D3DX_PI || m_fRotDiff < -D3DX_PI)
+		{//-3.14`3.14‚Ì”ÍˆÍŠO‚Ìê‡
+			if (m_fRotDiff > D3DX_PI)
+			{
+				m_fRotDiff += (-D3DX_PI * 2);
+			}
+			else if (m_fRotDiff < -D3DX_PI)
+			{
+				m_fRotDiff += (D3DX_PI * 2);
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	m_Info.rot.y += m_fRotDiff * ROT_MULTI;
+
+	while (1)
+	{
+		if (m_Info.rot.y > D3DX_PI || m_Info.rot.y < -D3DX_PI)
+		{//-3.14`3.14‚Ì”ÍˆÍŠO‚Ìê‡
+			if (m_Info.rot.y > D3DX_PI)
+			{
+				m_Info.rot.y += (-D3DX_PI * 2);
+			}
+			else if (m_Info.rot.y < -D3DX_PI)
+			{
+				m_Info.rot.y += (D3DX_PI * 2);
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
 }

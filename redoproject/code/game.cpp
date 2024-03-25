@@ -26,6 +26,7 @@
 #include "meshdome.h"
 #include "player.h"
 #include "fileload.h"
+#include "score.h"
 #include "sun.h"
 
 // –³–¼–¼‘O‹óŠÔ‚ð’è‹`
@@ -91,6 +92,7 @@ CGame::CGame()
     m_pMeshDome = nullptr;
     m_pClient = nullptr;
     m_pTimer = nullptr;
+    m_pScore = nullptr;
     m_nSledCnt = 0;
     m_bEnd = false;
 	m_fOpenDoorUISin = 0.0f;
@@ -176,8 +178,10 @@ HRESULT CGame::Init(void)
         break;
     }
 
+
     //CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_GAME);
     CMeshDome::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 15000.0f, 3000.0f, 3, 8, 8);
+    m_pScore = CScore::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 40.0f * 4, 50.0f, 0.0f), 8, 1.0f, 20.0f, 70.0f);
     CSunTask::Create();
 
     return S_OK;
@@ -207,6 +211,12 @@ void CGame::Uninit(void)
         m_pClient->Uninit();
         delete m_pClient;
         m_pClient = nullptr;
+    }
+
+    if (m_pScore != nullptr) {
+        m_pScore->Uninit();
+        delete m_pScore;
+        m_pScore = nullptr;
     }
 
     CFileLoad::Release();
