@@ -127,6 +127,7 @@ void CResult::Uninit(void)
 	CFileLoad::Release();
 	CRanking::SetScore(m_nScore);
 	m_nScore = 0;
+	m_type = TYPE_MAX;
 	CManager::GetInstance()->GetCamera()->SetActive(true);
 	CManager::GetInstance()->GetSound()->Stop();
 }

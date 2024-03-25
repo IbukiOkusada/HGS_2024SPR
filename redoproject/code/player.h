@@ -17,6 +17,8 @@ class CWaist;
 class CCharacter;
 class CScore;
 class CModel;
+class CObject2D;
+class CNumber;
 
 // マクロ定義
 #define MAX_ITEM  (1280)  // 所持できるアイテムの最大数
@@ -134,6 +136,8 @@ private:	// 自分だけがアクセス可能
 	int m_nLife;				// 体力
 	int m_nId;					// ID
 	int m_nSpeedUpCounter;		// スピード
+	CObject2D* m_pObj;
+	CNumber* m_pLife;
 	float m_fSpeedBoost;
 	int m_nScoreBoost;
 	int m_nScoreUpCounter;
