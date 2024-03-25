@@ -29,6 +29,7 @@ public:	// 誰でもアクセス可能
 	static CSunTask *Create(void);
 
 	// メンバ関数(取得)
+	CObjectX* GetSunObject(void) { return SunObject; }
 
 	// メンバ関数(設定)
 

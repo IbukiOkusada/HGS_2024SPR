@@ -36,6 +36,7 @@
 #include "fade.h"
 #include "camera_manager.h"
 #include "camera.h"
+#include "sun.h"
 
 //===============================================
 // 無名名前空間
@@ -147,6 +148,23 @@ void CPlayer::Update(void)
 	// カメラの追従
 	CManager::GetInstance()->GetCamera()->Update();
 	CManager::GetInstance()->GetCamera()->Pursue(GetPosition(), GetRotation(), CManager::GetInstance()->GetCamera()->GetLength());
+
+	D3DXVECTOR3 posSun = CManager::GetInstance()->GetScene()->GetSun()->GetSunObject()->GetPosition();
+	D3DXVECTOR3 posPlayer = GetPosition();
+	float rotSunPlayer = atan2f(posPlayer.x - posSun.x, posPlayer.z - posSun.z);
+
+	CManager::GetInstance()->GetDebugProc()->Print("太陽との角度[%f]\n", rotSunPlayer);
+	CManager::GetInstance()->GetDebugProc()->Print("プレイヤーの角度[%f, %f, %f]\n", GetRotation().x, GetRotation().y, GetRotation().z);
+	CManager::GetInstance()->GetDebugProc()->Print("太陽との角度差[%f]\n", rotSunPlayer - GetRotation().y);
+
+	if (rotSunPlayer - GetRotation().y < 1.0f && rotSunPlayer - GetRotation().y > -1.0f)
+	{
+		CManager::GetInstance()->GetDebugProc()->Print("プレイヤーの状態[開花]\n");
+	}
+	else
+	{
+		CManager::GetInstance()->GetDebugProc()->Print("プレイヤーの状態[通常]\n");
+	}
 
 	SetMatrix();
 }
