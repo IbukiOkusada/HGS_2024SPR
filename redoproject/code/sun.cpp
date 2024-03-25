@@ -14,6 +14,7 @@
 CSunTask::CSunTask()
 {
 	// 値のクリア
+	Rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
 
 //==========================================================
@@ -29,7 +30,9 @@ CSunTask::~CSunTask()
 //==========================================================
 HRESULT CSunTask::Init(void)
 {
-	SunObject = CObjectX::Create(D3DXVECTOR3(150.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data/MODEL/30msphere", 4);
+	SunObject = CObjectX::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data/MODEL/30msphere.x", 4);
+
+	Rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	return S_OK;
 }
@@ -48,11 +51,21 @@ void CSunTask::Uninit(void)
 void CSunTask::Update(void)
 {
 	// 太陽の位置決定
-	D3DXVECTOR3 PosSun;
-	PosSun = PosRelativeMtx(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), SunObject->GetPosition());
+	D3DXVECTOR3 SunPos;
+	SunPos = PosRelativeMtx(D3DXVECTOR3(0.0f, 0.0f, 0.0f), Rot, D3DXVECTOR3(13000.0f, 0.0f, 0.0f));
+
+	//回転させる
+	Rot.x = 1.44f;
+	Rot.y += 0.0f;
+	Rot.z += 0.2f;
+
+	if (Rot.z > D3DX_PI)
+	{
+		Rot.z -= D3DX_PI * 2.0f;
+	}
 
 	// 位置代入
-	SunObject->SetPosition(PosSun);
+	SunObject->SetPosition(SunPos);
 }
 
 //==========================================================
@@ -60,17 +73,17 @@ void CSunTask::Update(void)
 //==========================================================
 CSunTask *CSunTask::Create(void)
 {
-	CSunTask *pSampleTask = nullptr;
+	CSunTask *pSunTask = nullptr;
 
-	pSampleTask = new CSunTask;
+	pSunTask = new CSunTask;
 
-	if (pSampleTask != nullptr)
+	if (pSunTask != nullptr)
 	{
 		// 初期化処理
-		pSampleTask->Init();
+		pSunTask->Init();
 	}
 
-	return pSampleTask;
+	return pSunTask;
 }
 
 //========================================

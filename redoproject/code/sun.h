@@ -38,7 +38,8 @@ private:	// 自分だけがアクセス可能
 	D3DXVECTOR3 PosRelativeMtx(D3DXVECTOR3 posO, D3DXVECTOR3 rotO, D3DXVECTOR3 offset);
 
 	// メンバ変数
-	CObject *SunObject;
+	CObjectX *SunObject;
+	D3DXVECTOR3 Rot;
 };
 
 #endif
