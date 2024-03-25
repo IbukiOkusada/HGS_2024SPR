@@ -414,6 +414,30 @@ void CPlayer::StateSet(void)
 		break;
 
 	}
+
+	switch (m_headState)
+	{
+	case CPlayer::HEADSTATE_NORMAL:		// つぼみ
+		if (m_pBody->GetMotion() != nullptr)
+		{
+			m_pBody->GetMotion()->BlendSet(0);
+		}
+		break;
+
+	case CPlayer::HEADSTATE_FLOWERING:	// 開花
+		if (m_pBody->GetMotion() != nullptr)
+		{
+			m_pBody->GetMotion()->BlendSet(1);
+		}
+		break;
+
+	case CPlayer::HEADSTATE_DAMAGE:		// ダメージ
+		if (m_pBody->GetMotion() != nullptr)
+		{
+			m_pBody->GetMotion()->BlendSet(2);
+		}
+		break;
+	}
 }
 
 //===============================================
