@@ -20,6 +20,7 @@ const char* CFlower::m_apModelType[CFlower::TYPE_MAX] = {
 
 namespace {
 	const float HITLENGTH = (200.0f);
+	const D3DXCOLOR SETCOL = { 1.0f, 1.0f, 1.0f, 1.0f };
 }
 
 //==========================================================
@@ -29,6 +30,7 @@ CFlower::CFlower()
 {
 	// 値のクリア
 	m_pModel = nullptr;
+	m_nType = TYPE_MAX;
 }
 
 //==========================================================
@@ -45,6 +47,7 @@ CFlower::~CFlower()
 HRESULT CFlower::Init(void)
 {
 	int nRand = rand() % TYPE_MAX;
+	m_nType = nRand;
 
 	// モデル生成
 	m_pModel = CModel::Create(m_apModelType[nRand]);
@@ -97,6 +100,21 @@ void CFlower::Update(void)
 	// 追跡確認
 	if (fLength < HITLENGTH) {	// 現在見ているプレイヤーの方が近い場合
 		m_bHit = true;
+
+		switch (m_nType) {
+		case TYPE_SPEED:
+			pPlayer->SpeedBoost();
+			break;
+
+		case TYPE_GROWSPEED:
+			pPlayer->ScoreBoost();
+			break;
+
+		case TYPE_SLEEP:
+
+			break;
+		}
+
 		if (m_pModel != nullptr) {
 			m_pModel->ChangeCol(false);
 		}

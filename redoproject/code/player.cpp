@@ -50,6 +50,8 @@ namespace {
 	const float DAMAGE_APPEAR = (40.0f);
 	const int SETLIFE = (4);
 	const int ADDSCORE = (3);
+	const int SCOREBOOSTTIME = (300);
+	const int SPEEDBOOSTTIME = (300);
 }
 
 namespace PLAYER
@@ -89,6 +91,10 @@ CPlayer::CPlayer()
 	m_pScore = nullptr;
 	m_nLife = 0;
 	m_headState = HEADSTATE_NORMAL;
+	m_nSpeedUpCounter = 0;
+	m_fSpeedBoost = 0;
+	m_nScoreBoost = 0;
+	m_nScoreUpCounter = 0;
 
 	CPlayerManager::GetInstance()->ListIn(this);
 }
@@ -195,7 +201,23 @@ void CPlayer::Update(void)
 	CManager::GetInstance()->GetCamera()->Update();
 	D3DXVECTOR3 pos = GetPosition();
 	pos.y += 70.0f;
-	CManager::GetInstance()->GetCamera()->Pursue(pos, GetRotation(), CManager::GetInstance()->GetCamera()->GetLength());
+	CManager::GetInstance()->GetCamera()->Pursue(pos, GetRotation(), 600.0f);
+
+	// ブースト処理
+	if(m_nScoreUpCounter > 0){
+		m_nScoreUpCounter--;
+		if (m_nScoreUpCounter <= 0) {
+			m_nScoreUpCounter = 0;
+			m_nScoreBoost = 0;
+		}
+	}
+	if (m_nSpeedUpCounter > 0) {
+		m_nSpeedUpCounter--;
+		if (m_nSpeedUpCounter <= 0) {
+			m_nSpeedUpCounter = 0;
+			m_fSpeedBoost = 0.0f;
+		}
+	}
 
 	SetMatrix();
 	BodySet();
@@ -285,7 +307,7 @@ void CPlayer::Move(void)
 	CInputPad *pInputPad = CManager::GetInstance()->GetInputPad();
 	CCamera* pCamera = CManager::GetInstance()->GetCamera();		// カメラのポインタ
 	D3DXVECTOR3 CamRot = pCamera->GetRotation();	// カメラの角度
-	float fSpeed = MOVE;	// 移動量
+	float fSpeed = MOVE + m_fSpeedBoost;	// 移動量
 
 	// 入力装置確認
 	if (nullptr == pInputKey){
@@ -601,7 +623,7 @@ void CPlayer::AddScore(void){
 	}
 
 	// 加算
-	m_pScore->AddScore(ADDSCORE);
+	m_pScore->AddScore(ADDSCORE + m_nScoreBoost);
 }
 //===============================================
 // 開花状態設定
@@ -647,6 +669,10 @@ void CPlayer::HeadSun(void)
 //===============================================
 void CPlayer::Damage(void)
 {
+	if (m_nScoreUpCounter) {
+
+	}
+
 	if (m_Info.state != STATE_NORMAL) {
 		return;
 	}
@@ -659,4 +685,22 @@ void CPlayer::Damage(void)
 	if (m_nLife <= 0) {
 		m_Info.state = STATE_DEATH;
 	}
+}
+
+//===============================================
+// 速度増加
+//===============================================
+void CPlayer::SpeedBoost(void)
+{
+	m_fSpeedBoost = MOVE * 0.5f;
+	m_nSpeedUpCounter = SPEEDBOOSTTIME;
+}
+
+//===============================================
+// スコア増加
+//===============================================
+void CPlayer::ScoreBoost(void)
+{
+	m_nScoreBoost += ADDSCORE;
+	m_nScoreUpCounter = SCOREBOOSTTIME;
 }
