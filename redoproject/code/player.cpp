@@ -43,7 +43,7 @@
 // 無名名前空間
 //===============================================
 namespace {
-	const float MOVE = (1.0f);	// 移動量
+	const float MOVE = (1.5f);	// 移動量
 	const float ROT_MULTI = (0.1f);	// 向き補正倍率
 	const float INER = (0.3f);		// 慣性
 	const float DAMAGE_APPEAR = (40.0f);
@@ -129,7 +129,7 @@ HRESULT CPlayer::Init(void)
 	// パラメータの設定
 	m_Info.state = STATE_APPEAR;
 	m_type = TYPE_NONE;
-	m_headState = HEADSTATE_FLOWERING;
+	m_headState = HEADSTATE_NORMAL;
 	m_nLife = SETLIFE;
 
 	return S_OK;
@@ -574,4 +574,23 @@ void CPlayer::AddScore(void){
 
 	// 加算
 	m_pScore->AddScore(ADDSCORE);
+}
+
+//===============================================
+// ダメージ
+//===============================================
+void CPlayer::Damage(void)
+{
+	if (m_Info.state != STATE_NORMAL) {
+		return;
+	}
+
+	m_Info.state = STATE_DAMAGE;
+	m_Info.fStateCounter = DAMAGE_APPEAR;
+	m_headState = HEADSTATE_DAMAGE;
+	m_nLife--;
+
+	if (m_nLife <= 0) {
+		m_Info.state = STATE_DEATH;
+	}
 }

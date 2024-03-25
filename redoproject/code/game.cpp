@@ -28,47 +28,11 @@
 #include "fileload.h"
 #include "score.h"
 #include "sun.h"
+#include "time.h"
 
 // 無名名前空間を定義
 namespace {
-    const D3DXVECTOR3 STARTDOORPOS = { -1160.0f, 0.0f, 950.0f };	// スタート地点ドア基本座標
-    const D3DXVECTOR3 PLAYERSTARTPOS = { 0.0f, 0.0f, -5500.0f };  // プレイヤーのスタート位置
-    const D3DXVECTOR3 LEVERPOS[4] =
-    {
-        D3DXVECTOR3(130.0f, 100.0f, -5130.0f),
-        D3DXVECTOR3(-1000.0f, 100.0f, -4440.0f),
-        D3DXVECTOR3(470.0f, 100.0f, -560.0f),
-        D3DXVECTOR3(360.0f, 100.0f, -1900.0f),
-    };
-
-    const D3DXVECTOR3 LEVERROT[4] =
-    {
-        D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
-        D3DXVECTOR3(0.0f, D3DX_PI, 0.0f),
-        D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-        D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f),
-    };
-
-    const D3DXVECTOR3 OPEN_SETPOS = { SCREEN_WIDTH * 1.3f, SCREEN_HEIGHT * 0.5f, 0.0f };  // スタートドア開いたときのUIの生成位置
-    const D3DXVECTOR3 OPEN_SETROT = { 0.0f, 0.0f, D3DX_PI * 0.0f };                       // 向き
-    const D3DXVECTOR2 OPEN_SIZE = { 470.0f, 150.0f };                                     // サイズ
-    const float OPEN_MOVESPEED = (-3.3f);                                                 // 移動スピード
-    const float OPEN_MOVESIN = (0.05f);
-    const float OPEN_MOVESIZE = (30.0f);
-    const D3DXVECTOR2 QUATAUI_SIZE = { 100.0f, 50.0f };	// ノルマのUIのサイズ
-    const D3DXVECTOR2 SCORE_SIZE = { 14.0f, 18.0f };	// スコアのサイズ
-    const float DOOR_SPACE = (-20.0f);			// 各スタート地点ドアの間
-    const char* FILEPASS = "data\\TXT\\player";	// ファイルのパス
-    const char* FILEEXT = ".txt";				// ファイルの拡張子
-    const int FILEPASS_SIZE = (200);			// ファイルのパスサイズ
-    const int START_TIMER = (210);				// 開始制限時間
-    const int START_WAITCNT = (430);            // スタート時の走ってる時間
-    const int PLAYER_MOVESTART = (180);
-    const int CAMERA_ROTATESTART = (240);
-    const D3DXVECTOR3 START_CAMERAROT = {0.0f, D3DX_PI * 0.0f, D3DX_PI * 0.38f};
-    const int SCORE = (15000);                   // 初期のスコア
-    const int UNINITCOUNT = (120);              // ノルマのUIが消えるまでの時間
-    const int PLAYER_SPWANSTART = (240);
+    const int MAX_TIME = (60 * 2);	// 最大時間
     const int MAX_STRING = (2048);
     const int DEF_PORT = (22333);
     const char* ADDRESSFILE	= "data\\TXT\\address.txt";
@@ -156,7 +120,7 @@ HRESULT CGame::Init(void)
         }
 
         CPlayer *pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-        m_pScore = CScore::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 40.0f * 4, 50.0f, 0.0f), 8, 1.0f, 20.0f, 70.0f);
+        m_pScore = CScore::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.2f - 40.0f * 4, 30.0f, 0.0f), 8, 1.0f, 20.0f, 60.0f);
         pPlayer->SetScore(m_pScore);
     }
         break;
@@ -184,6 +148,9 @@ HRESULT CGame::Init(void)
     //CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_GAME);
     CMeshDome::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 15000.0f, 3000.0f, 3, 8, 8);
     CSunTask::Create();
+    m_pTimer = CTime::Create(D3DXVECTOR3(550.0f, 100.0f, 0.0f));
+    m_pTimer->Set(0);
+    m_pTimer->SetMax(MAX_TIME * 2);
 
     return S_OK;
 }
@@ -220,6 +187,12 @@ void CGame::Uninit(void)
         m_pScore = nullptr;
     }
 
+    if (m_pTimer != nullptr) {
+        m_pTimer->Uninit();
+        delete m_pTimer;
+        m_pTimer = nullptr;
+    }
+
     CFileLoad::Release();
 
     // defaultカメラオン
@@ -242,6 +215,14 @@ void CGame::Update(void)
     if (pInputKey->GetTrigger(DIK_P) == true || pInputPad->GetTrigger(CInputPad::BUTTON_START, 0))
     {//ポーズキー(Pキー)が押された
         m_bPause = m_bPause ? false : true;
+    }
+
+    if (m_pTimer != nullptr) {
+        m_pTimer->Update();
+
+        if (m_pTimer->GetNum() >= MAX_TIME) {
+            CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
+        }
     }
 
     CScene::Update();
