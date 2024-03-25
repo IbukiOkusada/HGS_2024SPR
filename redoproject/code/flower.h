@@ -49,6 +49,7 @@ private:	// 自分だけがアクセス可能
 	D3DXVECTOR3 m_pos;
 	D3DXVECTOR3 m_rot;
 	CModel* m_pModel;
+	int m_nType;
 	bool m_bHit;
 	static const char* m_apModelType[TYPE_MAX];	// モデルファイル
 };

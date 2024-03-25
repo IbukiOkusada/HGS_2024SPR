@@ -94,6 +94,8 @@ public:	// 誰でもアクセス可能
 	void SetPrev(CPlayer* pPrev) { m_pPrev = pPrev; }
 	void SetScore(CScore* pScore) { m_pScore = pScore; }
 	void SetRotDiff(float fDiff) { m_fRotDest = fDiff; }
+	void SpeedBoost(void);
+	void ScoreBoost(void);
 
 	// メンバ関数(取得)
 	D3DXVECTOR3 GetMove(void) { return m_Info.move; }
@@ -130,6 +132,10 @@ private:	// 自分だけがアクセス可能
 	bool m_bMove;				// 移動したか否か
 	int m_nLife;				// 体力
 	int m_nId;					// ID
+	int m_nSpeedUpCounter;		// スピード
+	float m_fSpeedBoost;
+	int m_nScoreBoost;
+	int m_nScoreUpCounter;
 	int m_nMotion;
 	TYPE m_type;
 	HEADSTATE m_headState;
