@@ -182,6 +182,7 @@ void CEnemy::Update(void)
 	m_Info.posOld = GetPosition();
 
 	StateSet();	
+	Collision();
 
 	{
 		
@@ -192,7 +193,7 @@ void CEnemy::Update(void)
 		//CManager::GetInstance()->GetScene()->SendPosition(m_Info.pos);
 		//CManager::GetInstance()->GetScene()->SendRotation(m_Info.rot);
 	}
-	
+
 	SetMatrix();
 	BodySet();
 }
@@ -299,8 +300,6 @@ void CEnemy::Move(void)
 		m_Info.move.x += -sinf(GetRotation().y + (D3DX_PI * 0.0f)) * fSpeed;
 		m_Info.move.z += -cosf(GetRotation().y + (D3DX_PI * 0.0f)) * fSpeed;
 	}
-
-	CEnemyManager::GetInstance()->Update();
 }
 
 //===============================================
@@ -518,5 +517,64 @@ void CEnemy::Damage(void)
 
 	if (m_nLife <= 0) {
 		m_Info.state = STATE_DEATH;
+	}
+}
+
+//===============================================
+// 当たり判定
+//===============================================
+void CEnemy::Collision(void)
+{
+	//プレイヤーとの判定
+	CPlayer* pPlayer = CPlayerManager::GetInstance()->GetTop();
+	if (pPlayer != NULL)
+	{
+		D3DXVECTOR3 myPos = GetPosition();
+		D3DXVECTOR3 playerPos = pPlayer->GetPosition();
+
+		float length = D3DXVec3Length(&(myPos - playerPos));
+
+		if (length < 40.0f)
+		{
+			float rot = atan2f(myPos.x - playerPos.x, myPos.z - playerPos.z);
+			myPos.x += sinf(rot) * 10.0f;
+			myPos.z += cosf(rot) * 10.0f;
+			playerPos.x += sinf(rot) * -10.0f;
+			playerPos.z += cosf(rot) * -10.0f;
+
+			SetPosition(myPos);
+			pPlayer->SetPosition(playerPos);
+			pPlayer->Damage();
+		}
+	}
+
+	//敵同士の判定
+	CEnemy* pEnemy = CEnemyManager::GetInstance()->GetTop();	// 先頭を取得
+	while (pEnemy != NULL)
+	{// 使用されていない状態まで
+
+		CEnemy* pEnemyNext = pEnemy->GetNext();	// 次のオブジェクトへのポインタを取得
+
+		D3DXVECTOR3 myPos = GetPosition();
+		D3DXVECTOR3 partnerPos = pEnemy->GetPosition();
+
+		if (myPos != partnerPos)
+		{
+			float length = D3DXVec3Length(&(myPos - partnerPos));
+
+			if (length < 40.0f)
+			{
+				float rot = atan2f(myPos.x - partnerPos.x, myPos.z - partnerPos.z);
+				myPos.x += sinf(rot) * 10.0f;
+				myPos.z += cosf(rot) * 10.0f;
+				partnerPos.x += sinf(rot) * -10.0f;
+				partnerPos.z += cosf(rot) * -10.0f;
+
+				SetPosition(myPos);
+				pEnemy->SetPosition(partnerPos);
+			}
+		}
+
+		pEnemy = pEnemyNext;	// 次のオブジェクトに移動
 	}
 }

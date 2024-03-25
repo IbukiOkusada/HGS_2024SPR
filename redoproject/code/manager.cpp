@@ -390,6 +390,8 @@ void CManager::Update(void)
 	{
 		m_pScene->Update();
 	}
+
+	CEnemyManager::GetInstance()->Update();
 }
 
 //===================================================

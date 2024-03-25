@@ -82,6 +82,7 @@ public:	// 誰でもアクセス可能
 	void Uninit(void);
 	void Update(void);
 	static CPlayer *Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot);
+	void Damage(void);
 
 	// メンバ関数(設定)
 	void SetMove(const D3DXVECTOR3 move) { m_Info.move = move; }
@@ -117,7 +118,6 @@ private:	// 自分だけがアクセス可能
 	void BodySet(void);
 	bool BodyCheck(CCharacter* pBody);
 	void AddScore(void);
-	void Damage(void);
 	void HeadSun(void);
 
 	// メンバ変数
