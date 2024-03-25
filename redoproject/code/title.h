@@ -12,6 +12,7 @@
 class CFileLoad;
 class CTitleEnter;
 class CPlayer;
+class CObject2D;
 
 //===============================================
 // タイトルクラスの定義(派生クラス)
@@ -35,6 +36,7 @@ private:
 	CFileLoad *m_pFileLoad;		// ファイル読み込みのポインタ
 	CTitleEnter *m_pEnter;
 	CPlayer* m_pPlayer;			// プレイヤーのポインタ
+	CObject2D* m_pLogo;
 	int m_nCounterTutorial;		// チュートリアル及び人数選択画面遷移タイマー
 	int m_nCounterRanking;		// ランキング自動遷移タイマー
 	bool m_bPush;				// チュートリアル遷移に必要なボタンが押されているか

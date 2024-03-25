@@ -40,6 +40,7 @@ CTitle::CTitle()
 	m_bPush = false;
 	m_pFileLoad = nullptr;
 	m_pEnter = nullptr;
+	m_pLogo = nullptr;
 }
 
 //===============================================
@@ -58,14 +59,20 @@ HRESULT CTitle::Init(void)
 
 	// カメラの初期位置設定
 	CCamera* pCamera = CManager::GetInstance()->GetCamera();
-	pCamera->SetPositionV(D3DXVECTOR3(-874.3f, 1124.15f, 1717.2f));
-	pCamera->SetPositionR(D3DXVECTOR3(80.0f, 95.0f, 220.0f));
+	pCamera->SetPositionV(D3DXVECTOR3(-384.3f, 191.15f, -473.2f));
+	pCamera->SetPositionR(D3DXVECTOR3(89.0f, 90.0f, -119.0f));
 	pCamera->SetLength(350.0f);
-	pCamera->SetRotation(D3DXVECTOR3(0.0f, -2.1f, 1.79f));
+	pCamera->SetRotation(D3DXVECTOR3(0.0f, -2.5f, 1.4f));
 	pCamera->SetActive(false);
 
 	// 外部ファイル読み込みの生成
 	CFileLoad::GetInstance()->OpenFile("data\\TXT\\model.txt");
+
+	// ロゴの描画
+	m_pLogo = CObject2D::Create({ 700.0f, 300.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 7);
+	m_pLogo->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\logo.png"));
+	m_pLogo->SetCol({ 1.0f, 1.0f, 1.0f, 1.0f });
+	m_pLogo->SetSize(500.0f, 300.0f);
 
 	// 遷移タイマー設定
 	m_nCounterTutorial = MOVE_TUTORIAL;
@@ -83,6 +90,13 @@ HRESULT CTitle::Init(void)
 //===============================================
 void CTitle::Uninit(void)
 {
+	if (m_pLogo != nullptr)
+	{
+		m_pLogo->Uninit();
+		//delete m_pLogo;
+		m_pLogo = nullptr;
+	}
+	
 	CFileLoad::Release();
 	CManager::GetInstance()->GetSound()->Stop();
 	CCamera* pCamera = CManager::GetInstance()->GetCamera();
