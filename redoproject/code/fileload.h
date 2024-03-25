@@ -23,10 +23,12 @@ private:	// 自分だけがアクセス可能な定義
 		char aFileName[256];	// ファイル名
 	}File;
 
-public:		// 誰でもアクセス可能
+private:
 
 	CFileLoad();	// コンストラクタ
 	~CFileLoad();	// デストラクタ
+
+public:		// 誰でもアクセス可能
 
 	// メンバ関数
 	void Init(void);
@@ -40,6 +42,8 @@ public:		// 誰でもアクセス可能
 	int GetModelNum(const char *pFileName);
 	int GetTexNumAll(void) { return m_nTexNumAll; }
 	int GetModelNumAll(void) { return m_nModelNumAll; }
+	static CFileLoad* GetInstance(void);
+	static void Release(void);
 
 private:	// 自分だけがアクセス可能
 
@@ -56,13 +60,13 @@ private:	// 自分だけがアクセス可能
 	void LoadCylinderData(FILE *pFile);
 	void LoadVtxMaxData(FILE *pFile, int nIdx);
 	void LoadVtxMinData(FILE *pFile, int nIdx);
-	void LoadGimmickData(FILE *pFile, int nIdx);
 
 	// メンバ変数
 	File *m_pModelFile;	// モデルファイル情報
 	File *m_pTextureFile;	// テクスチャファイル情報
 	int m_nTexNumAll;	// テクスチャ総数
 	int m_nModelNumAll;	// モデル総数
+	static CFileLoad* m_pInstance;	// インスタンス
 };
 
 #endif

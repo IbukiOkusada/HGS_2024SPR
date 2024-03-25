@@ -42,6 +42,9 @@
 #define LOAD_VTXMAX		"VTXMAX"				// 当たり判定最大
 #define LOAD_VTXMIN		"VTXMIN"				// 当たり判定最小
 
+// 静的メンバ変数宣言
+CFileLoad* CFileLoad::m_pInstance = nullptr;	// インスタンス
+
 //==========================================================
 // コンストラクタ
 //==========================================================
@@ -74,7 +77,17 @@ void CFileLoad::Init(void)
 //==========================================================
 void CFileLoad::Uninit(void)
 {
+	if (m_pTextureFile != nullptr)
+	{
+		delete m_pTextureFile;
+		m_pTextureFile = nullptr;
+	}
 
+	if (m_pModelFile != nullptr)
+	{
+		delete m_pModelFile;
+		m_pModelFile = nullptr;
+	}
 }
 
 //==========================================================
@@ -611,7 +624,26 @@ void CFileLoad::LoadVtxMinData(FILE *pFile, int nIdx)
 	CManager::GetInstance()->GetModelFile()->SetSizeVtxMin(nIdx, VtxMin);
 }
 
-void LoadGimmickData(FILE *pFile, int nIdx)
+//==========================================================
+// インスタンスを確保
+//==========================================================
+CFileLoad* CFileLoad::GetInstance(void)
 {
+	if (m_pInstance == nullptr) {	// 使われていない
+		m_pInstance = new CFileLoad;
+	}
 
+	return m_pInstance;
+}
+
+//==========================================================
+// インスタンスをリリース
+//==========================================================
+void CFileLoad::Release(void)
+{
+	if (m_pInstance != nullptr) {	// インスタンスを確保されている
+		m_pInstance->Uninit();
+		delete m_pInstance;
+		m_pInstance = nullptr;
+	}
 }

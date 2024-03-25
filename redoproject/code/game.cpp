@@ -25,6 +25,7 @@
 #include "ranking.h"
 #include "meshdome.h"
 #include "player.h"
+#include "fileload.h"
 
 // 無名名前空間を定義
 namespace {
@@ -140,10 +141,7 @@ HRESULT CGame::Init(void)
     }
 
     // 外部ファイル読み込みの生成
-    if (nullptr == m_pFileLoad)
-    {// 使用していない場合
-
-    }
+    CFileLoad::GetInstance()->OpenFile("data\\TXT\\model.txt");
 
     switch (m_state)
     {
@@ -208,6 +206,8 @@ void CGame::Uninit(void)
         delete m_pClient;
         m_pClient = nullptr;
     }
+
+    CFileLoad::Release();
 
     // defaultカメラオン
     CManager::GetInstance()->GetCamera()->SetDraw(true);

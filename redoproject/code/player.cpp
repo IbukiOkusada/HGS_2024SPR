@@ -41,7 +41,7 @@
 // –³–¼–¼‘O‹óŠÔ
 //===============================================
 namespace {
-	const float MOVE = (3.5f);	// ˆÚ“®—Ê
+	const float MOVE = (1.0f);	// ˆÚ“®—Ê
 	const float ROT_MULTI = (0.1f);	// Œü‚«•â³”{—¦
 	const float INER = (0.3f);		// Šµ«
 	const float DAMAGE_APPEAR = (40.0f);
