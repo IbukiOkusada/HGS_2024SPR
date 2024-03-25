@@ -43,7 +43,7 @@ private:	// 自分だけがアクセス可能な定義
 	{
 		STATE_APPEAR = 0,	// 出現状態
 		STATE_NORMAL,		// 通常状態
-		STATE_OPEN,			// 開花状態
+		STATE_SLEEP,		// 通常状態
 		STATE_DAMAGE,		// ダメージ状態
 		STATE_DEATH,		// 死亡状態
 		STATE_MAX
