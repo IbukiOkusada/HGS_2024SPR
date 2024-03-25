@@ -217,9 +217,12 @@ void CPlayer::Update(void)
 			m_nScoreUpCounter = 0;
 			m_nScoreBoost = 0;
 		}
+		CParticle::Create(m_Info.pos, CEffect::TYPE_SCOREUP);
 	}
+
 	if (m_nSpeedUpCounter > 0) {
 		m_nSpeedUpCounter--;
+		CParticle::Create(m_Info.pos, CEffect::TYPE_SPEEDUP);
 		if (m_nSpeedUpCounter <= 0) {
 			m_nSpeedUpCounter = 0;
 			m_fSpeedBoost = 0.0f;

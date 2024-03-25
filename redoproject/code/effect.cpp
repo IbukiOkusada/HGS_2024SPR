@@ -130,6 +130,31 @@ void CEffect::Update(void)
 		m_Info.move.x -= m_Info.move.x * 0.025f * CManager::GetInstance()->GetSlow()->Get();
 		m_Info.move.y -= m_Info.move.y * 0.01f * CManager::GetInstance()->GetSlow()->Get();
 		m_Info.move.z -= m_Info.move.z * 0.025f * CManager::GetInstance()->GetSlow()->Get();
+		m_Info.fRadius -= 0.5f * CManager::GetInstance()->GetSlow()->Get();
+		m_Info.col.a -= 0.05f * CManager::GetInstance()->GetSlow()->Get();
+
+		{
+			D3DXVECTOR3 rot = m_pObjectBilBoard->GetRotation();
+			rot.z += D3DX_PI * (rand() % 50 * 0.001f);
+			m_pObjectBilBoard->SetRotation(rot);
+		}
+
+		break;
+	case TYPE_SPEEDUP:	// ‰Œ
+
+		m_Info.fRadius -= 0.5f * CManager::GetInstance()->GetSlow()->Get();
+		m_Info.col.a -= 0.05f * CManager::GetInstance()->GetSlow()->Get();
+
+		{
+			D3DXVECTOR3 rot = m_pObjectBilBoard->GetRotation();
+			rot.z += D3DX_PI * (rand() % 50 * 0.001f);
+			m_pObjectBilBoard->SetRotation(rot);
+		}
+
+		break;
+
+	case TYPE_SCOREUP:	// ‰Œ
+
 		m_Info.fRadius -= 0.75f * CManager::GetInstance()->GetSlow()->Get();
 		m_Info.col.a -= 0.05f * CManager::GetInstance()->GetSlow()->Get();
 
@@ -324,6 +349,20 @@ CTexture::TYPE CEffect::SetTex(TYPE type)
 
 	}
 	break;
+
+	case TYPE_SPEEDUP:
+	{
+		return CTexture::TYPE_SPEED;
+
+	}
+	break;
+
+	case TYPE_SCOREUP:
+	{
+		return CTexture::TYPE_SCORE;
+
+	}
+	break;
 	}
 
 	return CTexture::TYPE();
@@ -356,6 +395,24 @@ void CEffect::DrawSet(void)
 	break;
 
 	case TYPE_FLOWERING:
+	{
+		m_pObjectBilBoard->SetAlphaText(true);
+		m_pObjectBilBoard->SetZTest(true);
+		m_pObjectBilBoard->SetLighting(true);
+		m_pObjectBilBoard->SetFusion(CObjectBillboard::FUSION_ADD);
+	}
+	break;
+
+	case TYPE_SPEEDUP:
+	{
+		m_pObjectBilBoard->SetAlphaText(true);
+		m_pObjectBilBoard->SetZTest(true);
+		m_pObjectBilBoard->SetLighting(true);
+		m_pObjectBilBoard->SetFusion(CObjectBillboard::FUSION_ADD);
+	}
+	break;
+
+	case TYPE_SCOREUP:
 	{
 		m_pObjectBilBoard->SetAlphaText(true);
 		m_pObjectBilBoard->SetZTest(true);
