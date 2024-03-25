@@ -41,7 +41,6 @@ CTitle::CTitle()
 	m_pFileLoad = nullptr;
 	m_pEnter = nullptr;
 	m_pLogo = nullptr;
-	m_pPressA = nullptr;
 }
 
 //===============================================
@@ -75,12 +74,6 @@ HRESULT CTitle::Init(void)
 	m_pLogo->SetCol({ 1.0f, 1.0f, 1.0f, 1.0f });
 	m_pLogo->SetSize(500.0f, 300.0f);
 
-	// PressEnterorA
-	m_pPressA = CObject2D::Create({ 600.0f, 600.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 7);
-	m_pPressA->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\PRESS_ENTER_OR_A.png"));
-	m_pPressA->SetCol({ 1.0f, 1.0f, 1.0f, 1.0f });
-	m_pPressA->SetSize(300.0f, 50.0f);
-
 	// 遷移タイマー設定
 	m_nCounterTutorial = MOVE_TUTORIAL;
 	m_nCounterRanking = AUTOMOVE_RANKING;
@@ -97,13 +90,6 @@ HRESULT CTitle::Init(void)
 //===============================================
 void CTitle::Uninit(void)
 {
-	if (m_pPressA != nullptr)
-	{
-		m_pPressA->Uninit();
-		//delete m_pPressA;
-		m_pPressA = nullptr;
-	}
-
 	if (m_pLogo != nullptr)
 	{
 		m_pLogo->Uninit();
@@ -136,6 +122,10 @@ void CTitle::Update(void)
 		}
 	}
 	else {
+		m_nCounterRanking--;
+		if (m_nCounterRanking <= 0) {
+			CManager::GetInstance()->GetFade()->Set(CScene::MODE_RANKING);
+		}
 	}
 
 	CScene::Update();

@@ -46,8 +46,7 @@ private:
 	// メンバ変数
 	CFileLoad* m_pFileLoad;	// ファイル読み込みのポインタ
 	CMeshDome* m_pMeshSky;		// 空用
-	CTime* m_pTime;			// タイマー
-	CTime* m_apScore[NUM_RANK];	// スコアのポインタ(順位分)
+	CScore* m_apScore[NUM_RANK];	// スコアのポインタ(順位分)
 	int m_nRank;				// 今回のランク
 	int m_nTimer;				// 遷移タイマー
 	static int m_nScore;		// 今回のスコア

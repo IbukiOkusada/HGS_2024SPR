@@ -18,6 +18,7 @@
 #include "camera.h"
 #include "meshdome.h"
 #include "fileload.h"
+#include "score.h"
 
 // マクロ定義
 #define RANKING_FILE	"data\\FILE\\ranking.bin"	// ランキングファイル
@@ -39,7 +40,6 @@ CRanking::CRanking()
 {
 	m_pMeshSky = NULL;
 	m_nTimer = 0;
-	m_pTime = NULL;
 }
 
 //===============================================
@@ -58,7 +58,7 @@ HRESULT CRanking::Init(void)
 	int aScore[NUM_RANK] = {};	// スコア格納用
 	m_nRank = -1;	//ランクインしてない状態
 
-		// 外部ファイル読み込みの生成
+	// 外部ファイル読み込みの生成
 	CFileLoad::GetInstance()->OpenFile("data\\TXT\\model.txt");
 
 	// データの読み込み
@@ -70,11 +70,27 @@ HRESULT CRanking::Init(void)
 	// ランクイン確認
 	RankIn(&aScore[0], m_nScore);
 
-	char aBodyPass[FILEPASS_SIZE] = "";		// 胴体パス
-	char aLegPass[FILEPASS_SIZE] = "";		// 下半身パス
+	// ロゴの生成
+	CObject2D* p = CObject2D::Create(7);
+	p->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\ranking_logo.png"));
+	p->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.125f, 0.0f));
+	p->SetSize(SCREEN_WIDTH * 0.25f, SCREEN_HEIGHT * 0.11f);
 
-	sprintf(&aBodyPass[0], "%s\\motion_body%s", FILEPASS, FILEEXT);
-	sprintf(&aLegPass[0], "%s\\motion_leg%s", FILEPASS, FILEEXT);
+	// 順位分スコアの生成
+	for (int nCntRank = 0; nCntRank < NUM_RANK; nCntRank++)
+	{
+		if (m_apScore[nCntRank] == NULL)
+		{
+			m_apScore[nCntRank] = CScore::Create(D3DXVECTOR3(350.0f, 250.0f + nCntRank * 100.0f, 0.0f), 8, 1.0f, 40.0f, 80.0f);
+			m_apScore[nCntRank]->SetScore(aScore[nCntRank]);
+
+			if (m_nRank == nCntRank)
+			{
+				m_apScore[nCntRank]->SetClo(D3DXCOLOR(1.0f, 0.5f, 0.5f, 1.0f));
+			}
+		}
+	}
+
 	CMeshDome::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 15000.0f, 3000.0f, 3, 8, 8);
 
 	return S_OK;
@@ -85,6 +101,16 @@ HRESULT CRanking::Init(void)
 //===============================================
 void CRanking::Uninit(void)
 {
+	for (int nCntRank = 0; nCntRank < NUM_RANK; nCntRank++)
+	{
+		if (m_apScore[nCntRank] != NULL)
+		{
+			m_apScore[nCntRank]->Uninit();
+			delete m_apScore[nCntRank];	// メモリの開放
+			m_apScore[nCntRank] = NULL;	// 使用していない状態にする
+		}
+	}
+
 	CFileLoad::Release();
 	CManager::GetInstance()->GetSound()->Stop();
 	CManager::GetInstance()->GetCamera()->SetActive(true);
@@ -158,7 +184,7 @@ void CRanking::Load(int* pScore)
 	 //要素を入れておく
 		for (int nCntRanking = 0; nCntRanking < NUM_RANK; nCntRanking++)
 		{
-			pScore[nCntRanking] = 1000 * 5 + (5000 * nCntRanking);
+			pScore[nCntRanking] = 1000 + (1000 * nCntRanking);
 		}
 	}
 }
