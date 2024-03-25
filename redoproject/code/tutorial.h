@@ -13,6 +13,7 @@
 class CFileLoad;
 class CPlayer;
 class CEntryIcon;
+class CObject2D;
 class CObject3D;
 class CEnemy;
 
@@ -46,7 +47,8 @@ private:
 	CPlayer **m_ppPlayer;			    // プレイヤーのポインタ
 	CFileLoad *m_pFileLoad;			    // ファイル読み込みのポインタ
 	CEntryIcon *m_apObject[NUM_PLAYER]; // オブジェクト2Dのポインタ
-	CObject3D *m_pObject3D[NUM_PORI];   // オブジェクト3Dのポインタ
+	CObject3D* m_pObject3D[NUM_PORI];   // オブジェクト3Dのポインタ
+	CObject2D *m_pObject2D;				// オブジェクト2Dのポインタ
 	CEnemy*m_apEnemy[NUM_ENEMY];        // 敵のポインタ
 	int m_nCntRespawn;                  // 敵が再び出るまでのカウント
 	int m_nEnemyId;                     // 敵の番号

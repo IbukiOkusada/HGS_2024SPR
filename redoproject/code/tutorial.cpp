@@ -44,10 +44,7 @@ CTutorial::CTutorial()
 	// ’l‚ÌƒNƒŠƒA
 	m_pFileLoad = NULL;
 
-	for (int i = 0; i < NUM_PLAYER; i++)
-	{
-		m_apObject[i] = nullptr;
-	}
+	m_pObject2D = nullptr;
 
 	for (int i = 0; i < NUM_PORI; i++)
 	{
@@ -77,6 +74,12 @@ CTutorial::~CTutorial()
 //===============================================
 HRESULT CTutorial::Init(void)
 {
+	// ƒƒS‚Ì•`‰æ
+	m_pObject2D = CObject2D::Create({ 640.0f, 360.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, 7);
+	m_pObject2D->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\tutorial000.png"));
+	m_pObject2D->SetCol({ 1.0f, 1.0f, 1.0f, 1.0f });
+	m_pObject2D->SetSize(640.0f, 360.0f);
+
 	return S_OK;
 }
 
