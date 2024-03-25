@@ -30,6 +30,7 @@ public:	// 誰でもアクセス可能
 
 	// メンバ関数(取得)
 	CObjectX* GetSunObject(void) { return SunObject; }
+	D3DXVECTOR3 GetSunRot(void) { return Rot; }
 
 	// メンバ関数(設定)
 

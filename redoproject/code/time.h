@@ -39,6 +39,7 @@ public:	// ここから関数(誰でもアクセス可能)
 	int GetStartNum(void) { return m_nSetNum; }
 	float GetAnim(void) { return m_fAnimTimer; }
 	float GetDiff(void) { return m_fDiff; }
+	CObject2D *GetSun(void) { return m_pSun; }
 
 private:	// 自分だけがアクセス可能
 

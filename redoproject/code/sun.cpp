@@ -6,10 +6,13 @@
 //==========================================================
 #include "sun.h"
 #include "enemy.h"
+#include "manager.h"
+#include "time.h"
+#include "object2D.h"
 
 // マクロ定義
-#define SUN_SPEED (0.004f)	//太陽の回転速度
-#define SUN_ANGLE (1.48f)	//太陽の軸に対する角度
+#define SUN_SPEED (0.00436f)	//太陽の回転速度
+#define SUN_ANGLE (1.44f)	//太陽の軸に対する角度
 
 //==========================================================
 // コンストラクタ
