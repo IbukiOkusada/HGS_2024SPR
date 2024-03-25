@@ -701,16 +701,24 @@ void CPlayer::HeadSun(void)
 	CManager::GetInstance()->GetDebugProc()->Print("プレイヤーの角度[%f, %f, %f]\n", GetRotation().x, GetRotation().y, GetRotation().z);
 	CManager::GetInstance()->GetDebugProc()->Print("太陽との角度差[%f]\n", rotSunPlayerDef);
 
+	HEADSTATE state = m_headState;
 	// 角度の差が一定値以内で開花状態に
 	if (rotSunPlayerDef < 0.7f && rotSunPlayerDef > -0.7f)
 	{
 		m_headState = HEADSTATE_FLOWERING;
 		CManager::GetInstance()->GetDebugProc()->Print("プレイヤーの状態[開花]\n");
+
+		if (state != m_headState) {
+			CManager::GetInstance()->GetSound()->Play(CSound::LABEL_SE_ON);
+		}
 	}
 	else
 	{
 		m_headState = HEADSTATE_NORMAL;
 		CManager::GetInstance()->GetDebugProc()->Print("プレイヤーの状態[通常]\n");
+		if (state != m_headState) {
+			CManager::GetInstance()->GetSound()->Play(CSound::LABEL_SE_OFF);
+		}
 	}
 }
 

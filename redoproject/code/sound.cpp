@@ -18,6 +18,8 @@ const CSound::SOUNDINFO CSound::m_aSoundInfo[LABEL_MAX] =
 	{ "data/BGM/result.wav", -1 },		// BGMƒ^ƒCƒgƒ‹
 	{ "data/SE/get.wav", 0 },		// Enter
 	{ "data/SE/damage.wav", 0 },		// Enter
+	{ "data/SE/off.wav", 0 },		// Enter
+	{ "data/SE/on.wav", 0 },		// Enter
 };										
 
 //=============================================================================
