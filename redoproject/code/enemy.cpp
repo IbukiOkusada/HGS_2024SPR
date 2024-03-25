@@ -248,10 +248,16 @@ void CEnemy::Controller(void)
 	Adjust();
 
 	m_Info.move.x += (0.0f - m_Info.move.x) * 0.12f;	//x座標
-	m_Info.move.z += (0.0f - m_Info.move.z) * 0.12f;	//x座標
+	m_Info.move.z += (0.0f - m_Info.move.z) * 0.12f;	//z座標
 
 	pos.x += m_Info.move.x * fSlow;
+	pos.y += m_Info.move.y * fSlow;
 	pos.z += m_Info.move.z * fSlow;
+
+	if (pos.y < 0.0f)
+	{
+		pos.y = 0.0f;
+	}
 
 	// 当たり判定
 	{
@@ -260,7 +266,19 @@ void CEnemy::Controller(void)
 		D3DXVECTOR3 vtxMaxOld = vtxMax;
 		D3DXVECTOR3 vtxMinOld = vtxMin;
 		CObjectX::COLLISION_AXIS ColiAxis = CObjectX::TYPE_MAX;	// 当たっている方向をリセット
-		CObjectX::Collision(pos, m_Info.posOld, m_Info.move, vtxMin, vtxMax, vtxMinOld, vtxMaxOld, ColiAxis);
+
+		// オブジェクトと衝突しているか
+		D3DXVECTOR3 nor = CObjectX::Collision(pos, m_Info.posOld, m_Info.move, vtxMin, vtxMax, vtxMinOld, vtxMaxOld, ColiAxis);
+		if (nor != D3DXVECTOR3(0.0f,0.0f,0.0f) && nor != D3DXVECTOR3(0.0f, 1.0f, 0.0f))
+		{
+			// 衝突していたら登る
+			m_Info.move.y = 2.0f;
+		}
+		else
+		{
+			// 衝突していなかったら落ちる
+			m_Info.move.y -= 1.0f;
+		}
 	}
 
 	SetPosition(pos);
@@ -282,10 +300,12 @@ void CEnemy::Move(void)
 		D3DXVECTOR3 posEnemy = GetPosition();
 		float rotPlayer;
 
+		// プレイヤーとの距離を計算
 		float length = D3DXVec3Length(&(posEnemy - posPlayer));
 
-		if (length < 2000.0f)
+		if (length < 1500.0f)
 		{
+			// プレイヤーの方向を計算
 			rotPlayer = atan2f(posEnemy.x - posPlayer.x, posEnemy.z - posPlayer.z);
 
 			// 回転補正
@@ -299,8 +319,10 @@ void CEnemy::Move(void)
 				rotPlayer += D3DX_PI * 2.0f;
 			}
 
+			//向き調整
 			m_fRotDest = rotPlayer;
 
+			// 移動量代入
 			m_Info.move.x += -sinf(GetRotation().y + (D3DX_PI * 0.0f)) * fSpeed;
 			m_Info.move.z += -cosf(GetRotation().y + (D3DX_PI * 0.0f)) * fSpeed;
 		}
@@ -534,21 +556,25 @@ void CEnemy::Collision(void)
 	CPlayer* pPlayer = CPlayerManager::GetInstance()->GetTop();
 	if (pPlayer != NULL)
 	{
+		// 位置をとる
 		D3DXVECTOR3 myPos = GetPosition();
 		D3DXVECTOR3 playerPos = pPlayer->GetPosition();
 
+		// プレイヤーとの距離計算
 		float length = D3DXVec3Length(&(myPos - playerPos));
 
+		// 距離が一定以内
 		if (length < 40.0f)
 		{
+			// 押し戻し
 			float rot = atan2f(myPos.x - playerPos.x, myPos.z - playerPos.z);
 			myPos.x += sinf(rot) * 10.0f;
 			myPos.z += cosf(rot) * 10.0f;
-			playerPos.x += sinf(rot) * -10.0f;
-			playerPos.z += cosf(rot) * -10.0f;
 
+			// 移動量代入
 			SetPosition(myPos);
-			pPlayer->SetPosition(playerPos);
+
+			// ダメージ処理
 			pPlayer->Damage();
 		}
 	}
@@ -560,21 +586,27 @@ void CEnemy::Collision(void)
 
 		CEnemy* pEnemyNext = pEnemy->GetNext();	// 次のオブジェクトへのポインタを取得
 
+		// 位置をとる
 		D3DXVECTOR3 myPos = GetPosition();
 		D3DXVECTOR3 partnerPos = pEnemy->GetPosition();
 
+		// 自分ではない
 		if (myPos != partnerPos)
 		{
+			// 距離計算
 			float length = D3DXVec3Length(&(myPos - partnerPos));
 
+			// 距離が一定以内
 			if (length < 40.0f)
 			{
+				// 押し戻し
 				float rot = atan2f(myPos.x - partnerPos.x, myPos.z - partnerPos.z);
 				myPos.x += sinf(rot) * 10.0f;
 				myPos.z += cosf(rot) * 10.0f;
 				partnerPos.x += sinf(rot) * -10.0f;
 				partnerPos.z += cosf(rot) * -10.0f;
 
+				// 位置代入
 				SetPosition(myPos);
 				pEnemy->SetPosition(partnerPos);
 			}

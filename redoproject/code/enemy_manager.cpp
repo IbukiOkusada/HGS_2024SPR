@@ -51,8 +51,10 @@ void CEnemyManager::Uninit(void)
 //==========================================================
 void CEnemyManager::Update(void)
 {
+	// ƒJƒEƒ“ƒg‚ðŒ¸‚ç‚·
 	m_nCntSleep--;
 
+	// 0‚ÅŽ~‚ß‚é
 	if (m_nCntSleep < 0)
 	{
 		m_nCntSleep = 0;

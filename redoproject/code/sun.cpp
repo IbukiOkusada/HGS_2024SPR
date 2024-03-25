@@ -37,6 +37,7 @@ CSunTask::~CSunTask()
 //==========================================================
 HRESULT CSunTask::Init(void)
 {
+	//オブジェクト生成
 	SunObject = CObjectX::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), "data/MODEL/sun.x", 4);
 
 	Rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -73,13 +74,16 @@ void CSunTask::Update(void)
 		Rot.z -= D3DX_PI * 2.0f;
 	}
 
+	// 出現ペースの計算
 	int interbal = (int)(Rot.z * 1000000.0f) / 872;
 	if (interbal % 360 == 0)
 	{
+		// 敵生成
 		float posrandX = (float)(rand() % 4000 - 2000);
 		float posrandZ = (float)(rand() % 4000 - 2000);
 		CEnemy::Create(D3DXVECTOR3(posrandX, 0.0f, posrandZ), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
+		// 花生成
 		for (int nCnt = 0; nCnt < 7; nCnt++)
 		{
 			D3DXVECTOR3 pos = { 0.0f, -10.0f, 0.0f };
