@@ -24,6 +24,7 @@
 #include <assert.h>
 #include "ranking.h"
 #include "meshdome.h"
+#include "player.h"
 
 // 無名名前空間を定義
 namespace {
@@ -44,15 +45,6 @@ namespace {
         D3DXVECTOR3(0.0f, 0.0f, 0.0f),
         D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f),
     };
-
-
-	const char* TEXPASS[4] =
-	{
-		"data\\TEXTURE\\opendoor00.png",
-		"data\\TEXTURE\\opendoor01.png",
-		"data\\TEXTURE\\opendoor02.png",
-		"data\\TEXTURE\\opendoor03.png",
-	};
 
 	const D3DXVECTOR3 OPEN_SETPOS = { SCREEN_WIDTH * 1.3f, SCREEN_HEIGHT * 0.5f, 0.0f };  // スタートドア開いたときのUIの生成位置
 	const D3DXVECTOR3 OPEN_SETROT = { 0.0f, 0.0f, D3DX_PI * 0.0f };                       // 向き
@@ -162,11 +154,7 @@ HRESULT CGame::Init(void)
             m_nNumPlayer = 1;
         }
 
-        char aBodyPass[FILEPASS_SIZE] = "";		// 胴体パス
-        char aLegPass[FILEPASS_SIZE] = "";		// 下半身パス
-
-        sprintf(&aBodyPass[0], "%s\\motion_body%s", FILEPASS, FILEEXT);
-        sprintf(&aLegPass[0], "%s\\motion_leg%s", FILEPASS, FILEEXT);
+        CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
     }
         break;
 

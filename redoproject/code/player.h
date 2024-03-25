@@ -54,7 +54,6 @@ private:	// 自分だけがアクセス可能な定義
 		D3DXVECTOR3 pos;		// 位置
 		D3DXVECTOR3 rot;		// 向き
 		D3DXVECTOR3 move;		// 移動量
-		float fSlideMove;		// スライディング開始移動量
 		D3DXVECTOR3 posOld;		// 設定位置
 		D3DXMATRIX mtxWorld;	// ワールドマトリックス
 		STATE state;			// 状態
@@ -71,8 +70,7 @@ public:	// 誰でもアクセス可能
 	HRESULT Init(const char *pBodyName, const char *pLegName);	// オーバーロード
 	void Uninit(void);
 	void Update(void);
-	static CPlayer *Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const D3DXVECTOR3 move,
-		const char *pBodyName, const char *pLegName);
+	static CPlayer *Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot);
 
 	// メンバ関数(設定)
 	void SetMove(const D3DXVECTOR3 move) { m_Info.move = move; }
@@ -109,6 +107,7 @@ private:	// 自分だけがアクセス可能
 	float m_fRotMove;			// 現在の角度
 	float m_fRotDiff;			// 目的の角度
 	float m_fRotDest;			// 角度計算
+	bool m_bMove;				// 移動したか否か
 	int m_nId;					// ID
 	TYPE m_type;
 };

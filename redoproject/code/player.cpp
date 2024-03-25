@@ -34,64 +34,17 @@
 #include "meshwall.h"
 #include "player_manager.h"
 #include "fade.h"
+#include "camera_manager.h"
+#include "camera.h"
 
 //===============================================
-// マクロ定義
+// 無名名前空間
 //===============================================
-#define MOVE	(3.5f)		// 移動量
-#define GRAVITY	(-0.6f)		//プレイヤー重力
-#define ROT_MULTI	(0.1f)	// 向き補正倍率
-#define WIDTH	(20.0f)		// 幅
-#define HEIGHT	(80.0f)		// 高さ
-#define INER	(0.3f)		// 慣性
-#define JUMP	(16.0f)
-
 namespace {
-	const int HEADPARTS_IDX = (1);	// 頭のパーツインデックス
-	const float DAMAGE_INTERVAL = (10.0f);	// ダメージインターバル
-	const float DAMAGE_APPEAR = (110.0f);	// 無敵時間インターバル
-	const float DEATH_INTERVAL = (120.0f);	// 死亡インターバル
-	const float SPAWN_INTERVAL = (60.0f);	// 生成インターバル
-	const float SLIDING_INER = (0.015f);	// スライディング慣性
-	const float SLIDING_MINMOVE = (1.0f);	// スライディング可能最低移動量
-	const float SLIDING_STARTMOVE = (6.0f);	// スライディング開始可能移動量
-	const float SLIDING_SPEED = (0.5f);
-	const float WALLKICK_MOVE = (45.0f);	// 壁キック移動量
-	const float WALLKICK_INER = (0.1f);		// 壁キック中慣性
-	const float WALLKICK_SPEED = (1.0f);	// 壁キック中移動速度
-	const float WALLSLIDE_GRAVITY = (-1.5f);	// 壁ずり中落下速度
-	const float WALLDUSH_GRAVITY = (-0.75f);
-	const float SLIDEJUMP_INER = (0.02f);		// スライディング慣性
-	const float SLIDEJUMP_GRAVITY = (-0.25f);	// スライディングジャンプ重力
-	const float SLIDEJUMP = (7.0f);				// スライディングジャンプジャンプ力
-	const float SLIDEJUMP_SPEED = (1.75f);		// スライディングジャンプ移動量
-	const float WALLSLIDE_MOVE = (0.05f);		// 壁ずりいどうりょう
-	const float WALLDUSH_MOVE = (5.0f);			// 壁走り移動量
-	const float CAMROT_INER = (0.2f);			// カメラ慣性
-	const float SLIDINNG_ROTZ = (D3DX_PI * 0.51f);	// スライディングカメラ角度
-	const float SLIDING_LENGTH = (200.0f);			//スライディングカメラ距離
-	const float KICKUP_SPEED = (1.5f);			// 蹴りあがり移動速度
-	const float KICKUP_JUMP = (18.0f);			// 蹴りあがりジャンプ力
-	const float KICKUP_QUICKJUMP = (13.0f);		// ライダーキックからのジャンプ力
-	const float AXEKICK_ROTZ = (D3DX_PI * 0.21f);	// かかと落としカメラ
-	const float RIDERKICK_ROTZ = (D3DX_PI * 0.31f);	// ライダーキックカメラ向き
-	const float AXEKICK_CAMERALENGTH = (400.0f);	// かかと落としカメラ距離
-	const float SLOW_KICKCHARGE = (15.0f);			// スローまでのチャージ時間
-	const float KICK_LENGTH = (1000.0f);	// 攻撃範囲
-	const float RIDERKICK_SPEED = (24.0f);	// ライダーキック速度
-	const float RIDERKICK_HIGHSPEED = (60.0f);	// ライダーキック最速
-	const float RIDERKICK_CAMERALENGTH = (600.0f);	// ライダーキックカメラ距離
-	const float WALLKICK_GRAVITY = (-0.4f);
-	const float WALLKICK_JUMP = (11.0f);
-	const float AXEKICK_GRAVITY = (-2.5f);
-	const float AXEKICK_MOVE = (0.75f);
-	const int LIFE = (10);
-	const float KICK_STEPMOVE = (45.0f);
-	const float ATK_INTERVAL = (5.0f);
-	const float CEILING_ROTZ = (D3DX_PI * 0.65f);
-	const float CEILING_MOVE = (MOVE * 0.5f);
-	const float CEILING_CAMLENGTH = (300.0f);
-	const D3DXVECTOR3 LIFEUI_POS = { SCREEN_WIDTH * 0.175f, SCREEN_HEIGHT * 0.9f, 0.0f };
+	const float MOVE = (3.5f);	// 移動量
+	const float ROT_MULTI = (0.1f);	// 向き補正倍率
+	const float INER = (0.3f);		// 慣性
+	const float DAMAGE_APPEAR = (40.0f);
 }
 
 // 前方宣言
@@ -121,7 +74,7 @@ CPlayer::CPlayer()
 	m_fRotDest = 0.0f;
 	m_type = TYPE_NONE;
 	m_nId = -1;
-	m_Info.fSlideMove = 0.0f;
+	m_bMove = false;
 
 	CPlayerManager::GetInstance()->ListIn(this);
 }
@@ -180,27 +133,28 @@ void CPlayer::Update(void)
 
 	StateSet();	
 
-	if (m_type == TYPE_ACTIVE)
+	
 	{
 		
 		// プレイヤー操作
 		Controller();
 
 		// オンライン送信
-		CManager::GetInstance()->GetScene()->SendPosition(m_Info.pos);
-		CManager::GetInstance()->GetScene()->SendRotation(m_Info.rot);
-	}
-	else {
-
+		//CManager::GetInstance()->GetScene()->SendPosition(m_Info.pos);
+		//CManager::GetInstance()->GetScene()->SendRotation(m_Info.rot);
 	}
 	
+	// カメラの追従
+	CManager::GetInstance()->GetCamera()->Update();
+	CManager::GetInstance()->GetCamera()->Pursue(GetPosition(), GetRotation(), CManager::GetInstance()->GetCamera()->GetLength());
+
 	SetMatrix();
 }
 
 //===============================================
 // 生成
 //===============================================
-CPlayer *CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 move, const char *pBodyName, const char *pLegName)
+CPlayer *CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	CPlayer *pPlayer = nullptr;
 
@@ -210,7 +164,7 @@ CPlayer *CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 move, con
 	if (nullptr != pPlayer)
 	{// 生成できた場合
 		// 初期化処理
-		pPlayer->Init(pBodyName, pLegName);
+		pPlayer->Init();
 
 		// 座標設定
 		pPlayer->SetPosition(pos);
@@ -219,9 +173,6 @@ CPlayer *CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 move, con
 		pPlayer->SetRotation(rot);
 
 		pPlayer->m_fRotDest = rot.y;
-
-		// 移動量設定
-		pPlayer->SetMove(move);
 	}
 	else
 	{// 生成に失敗した場合
@@ -238,8 +189,21 @@ void CPlayer::Controller(void)
 {
 	D3DXVECTOR3 pos = GetPosition();	// 座標を取得
 	D3DXVECTOR3 rot = GetRotation();	// 向きを取得
+	float fSlow = CManager::GetInstance()->GetSlow()->Get();
 	float fIner = INER;
 	m_fRotMove = rot.y;	//現在の向きを取得
+
+	{
+		Move();
+	}
+
+	m_Info.move.x += (0.0f - m_Info.move.x) * 0.12f;	//x座標
+	m_Info.move.z += (0.0f - m_Info.move.z) * 0.12f;	//x座標
+
+	pos.x += m_Info.move.x * fSlow;
+	pos.z += m_Info.move.z * fSlow;
+
+	SetPosition(pos);
 }
 
 //===============================================
@@ -249,10 +213,84 @@ void CPlayer::Move(void)
 {
 	CInputKeyboard *pInputKey = CManager::GetInstance()->GetInputKeyboard();	// キーボードのポインタ
 	CInputPad *pInputPad = CManager::GetInstance()->GetInputPad();
+	CCamera* pCamera = CManager::GetInstance()->GetCamera();		// カメラのポインタ
+	D3DXVECTOR3 CamRot = pCamera->GetRotation();	// カメラの角度
+	float fSpeed = MOVE;	// 移動量
 
 	// 入力装置確認
 	if (nullptr == pInputKey){
 		return;
+	}
+
+	//プレイヤーの更新
+	if (pInputKey->GetPress(DIK_A) == true || pInputPad->GetStickPress(0, CInputPad::BUTTON_LEFT_X, 0.5f, CInputPad::STICK_MINUS) == true)
+	{
+		if (pInputKey->GetPress(DIK_W) == true || pInputPad->GetStickPress(0, CInputPad::BUTTON_LEFT_Y, 0.5f, CInputPad::STICK_PLUS))
+		{
+			m_Info.move.x += cosf(CamRot.y + (-D3DX_PI * 0.75f)) * fSpeed;
+			m_Info.move.z += sinf(CamRot.y + (-D3DX_PI * 0.75f)) * fSpeed;
+			m_fRotDest = (-CamRot.y + D3DX_PI * 0.25f);
+		}
+		else if (pInputKey->GetPress(DIK_S) == true || pInputPad->GetStickPress(0, CInputPad::BUTTON_LEFT_Y, 0.5f, CInputPad::STICK_MINUS))
+		{
+			m_Info.move.x += cosf(CamRot.y + (-D3DX_PI * 0.25f)) * fSpeed;
+			m_Info.move.z += sinf(CamRot.y + (-D3DX_PI * 0.25f)) * fSpeed;
+			m_fRotDest = (-CamRot.y + -D3DX_PI * 0.25f);
+		}
+		else
+		{
+			m_Info.move.x += cosf(CamRot.y + (-D3DX_PI * 0.5f)) * fSpeed;
+			m_Info.move.z += sinf(CamRot.y + (-D3DX_PI * 0.5f)) * fSpeed;
+			m_fRotDest = -CamRot.y;
+		}
+
+		// 移動した状態にする
+		m_bMove = true;
+	}
+	else if (pInputKey->GetPress(DIK_D) == true || pInputPad->GetStickPress(0, CInputPad::BUTTON_LEFT_X, 0.5f, CInputPad::STICK_PLUS) == true)
+	{
+		if (pInputKey->GetPress(DIK_W) == true || pInputPad->GetStickPress(0, CInputPad::BUTTON_LEFT_Y, 0.5f, CInputPad::STICK_PLUS))
+		{
+			m_Info.move.x += cosf(CamRot.y + (D3DX_PI * 0.75f)) * fSpeed;
+			m_Info.move.z += sinf(CamRot.y + (D3DX_PI * 0.75f)) * fSpeed;
+
+			m_fRotDest = (-CamRot.y + D3DX_PI * 0.75f);
+		}
+		else if (pInputKey->GetPress(DIK_S) == true || pInputPad->GetStickPress(0, CInputPad::BUTTON_LEFT_Y, 0.5f, CInputPad::STICK_MINUS))
+		{
+			m_Info.move.x += cosf(CamRot.y + (D3DX_PI * 0.25f)) * fSpeed;
+			m_Info.move.z += sinf(CamRot.y + (D3DX_PI * 0.25f)) * fSpeed;
+
+			m_fRotDest = (-CamRot.y + -D3DX_PI * 0.75f);
+		}
+		else
+		{
+			m_Info.move.x += cosf(CamRot.y + (D3DX_PI * 0.5f)) * fSpeed;
+			m_Info.move.z += sinf(CamRot.y + (D3DX_PI * 0.5f)) * fSpeed;
+			m_fRotDest = (-CamRot.y + D3DX_PI * 1.0f);
+		}
+
+		// 移動した状態にする
+		m_bMove = true;
+	}
+	else if (pInputKey->GetPress(DIK_W) == true || pInputPad->GetStickPress(0, CInputPad::BUTTON_LEFT_Y, 0.5f, CInputPad::STICK_PLUS))
+	{
+		m_Info.move.x += -cosf(CamRot.y) * fSpeed;
+		m_Info.move.z += -sinf(CamRot.y) * fSpeed;
+		m_fRotDest = (-CamRot.y + D3DX_PI * 0.5f);
+
+		// 移動した状態にする
+		m_bMove = true;
+
+	}
+	else if (pInputKey->GetPress(DIK_S) == true || pInputPad->GetStickPress(0, CInputPad::BUTTON_LEFT_Y, 0.5f, CInputPad::STICK_MINUS))
+	{
+		m_Info.move.x += cosf(CamRot.y) * fSpeed;
+		m_Info.move.z += sinf(CamRot.y) * fSpeed;
+		m_fRotDest = (-CamRot.y + -D3DX_PI * 0.5f);
+
+		// 移動した状態にする
+		m_bMove = true;
 	}
 }
 
@@ -342,8 +380,7 @@ void CPlayer::SetMatrix(void)
 //===============================================
 // 指定モーションに設定
 //===============================================
-void CPlayer::SetMotion(int nMotion) {
-	
+void CPlayer::SetMotion(int nMotion) {	
 	
 }
 
