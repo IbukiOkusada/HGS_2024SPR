@@ -153,7 +153,7 @@ void CResult::Update(void)
 		CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_START, 0) ||
 		CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_RETURN))
 	{
-		CManager::GetInstance()->GetFade()->Set(CScene::MODE_TITLE);
+		CManager::GetInstance()->GetFade()->Set(CScene::MODE_RANKING);
 	}
 
 	// ‰º”¼gXV
