@@ -19,7 +19,7 @@ const char* CFlower::m_apModelType[CFlower::TYPE_MAX] = {
 };
 
 namespace {
-	const float HITLENGTH = (100.0f);
+	const float HITLENGTH = (200.0f);
 }
 
 //==========================================================
