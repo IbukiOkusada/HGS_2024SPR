@@ -115,6 +115,7 @@ private:	// 自分だけがアクセス可能
 	bool BodyCheck(CCharacter* pBody);
 	void AddScore(void);
 	void Damage(void);
+	void HeadSun(void);
 
 	// メンバ変数
 	CPlayer *m_pPrev;			// 前のオブジェクトへのポインタ

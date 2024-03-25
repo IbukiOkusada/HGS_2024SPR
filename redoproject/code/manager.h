@@ -33,6 +33,7 @@ class CEnemyRoute;
 class CCarManager;
 class CEnemyManager;
 class CMiniMap;
+class CSunTask;
 
 //===============================================
 // シーンクラスの定義
@@ -66,6 +67,7 @@ public:
 	virtual CFileLoad *GetFileLoad(void) { return NULL; }
 	virtual CEditor *GetEditor(void) { return NULL; }
 	virtual CTime* GetTime(void) { return nullptr; }
+	virtual CSunTask* GetSun(void) { return nullptr; }
 	virtual void SendPosition(D3DXVECTOR3&) {  }
 	virtual void SendRotation(D3DXVECTOR3&) {  }
 	virtual void SendDamage(int) {  }

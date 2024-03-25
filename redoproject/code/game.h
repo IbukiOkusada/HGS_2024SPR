@@ -19,6 +19,7 @@ class CClient;
 class CMeshDome;
 class CPause;
 class CScore;
+class CSunTask;
 class CTime;
 
 // マクロ定義
@@ -60,6 +61,7 @@ public:
 	void SendSetUp(void);
 	void SendGoal(void);
 	CTime* GetTime(void)override { return m_pTimer; }
+	CSunTask* GetSun(void)override { return m_pSun; }
 	static void SetNumPlayer(int nNum) { m_nNumPlayer = nNum; }
 	static int GetNumPlayer(void) { return m_nNumPlayer; }
 
@@ -91,6 +93,7 @@ private:
 	WSADATA m_wsaData;
 	std::mutex m_mutex;
 	CScore* m_pScore;
+	CSunTask* m_pSun;
 	bool m_bEnd;
 	float m_fOpenDoorUISin;
 	bool m_bPause;              // ポーズ

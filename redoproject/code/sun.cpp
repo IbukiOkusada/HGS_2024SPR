@@ -54,11 +54,12 @@ void CSunTask::Update(void)
 	D3DXVECTOR3 SunPos;
 	SunPos = PosRelativeMtx(D3DXVECTOR3(0.0f, 0.0f, 0.0f), Rot, D3DXVECTOR3(13000.0f, 0.0f, 0.0f));
 
-	//‰ñ“]‚³‚¹‚é
-	Rot.x = 1.44f;
+	// ‰ñ“]‚³‚¹‚é
+	Rot.x = 1.48f;
 	Rot.y += 0.0f;
-	Rot.z += 0.2f;
+	Rot.z += 0.01f;
 
+	// ‰ñ“]•â³
 	if (Rot.z > D3DX_PI)
 	{
 		Rot.z -= D3DX_PI * 2.0f;

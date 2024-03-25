@@ -32,6 +32,7 @@
 
 // –³–¼–¼‘O‹óŠÔ‚ð’è‹`
 namespace {
+    
     const int MAX_TIME = (60 * 2);	// Å‘åŽžŠÔ
     const int MAX_STRING = (2048);
     const int DEF_PORT = (22333);
@@ -57,6 +58,7 @@ CGame::CGame()
     m_pClient = nullptr;
     m_pTimer = nullptr;
     m_pScore = nullptr;
+    m_pSun = nullptr;
     m_nSledCnt = 0;
     m_bEnd = false;
     m_fOpenDoorUISin = 0.0f;
@@ -120,6 +122,7 @@ HRESULT CGame::Init(void)
         }
 
         CPlayer *pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
         m_pScore = CScore::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.2f - 40.0f * 4, 30.0f, 0.0f), 8, 1.0f, 20.0f, 60.0f);
         pPlayer->SetScore(m_pScore);
     }
@@ -147,7 +150,8 @@ HRESULT CGame::Init(void)
 
     //CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_GAME);
     CMeshDome::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 15000.0f, 3000.0f, 3, 8, 8);
-    CSunTask::Create();
+
+    m_pSun = CSunTask::Create();
     m_pTimer = CTime::Create(D3DXVECTOR3(550.0f, 100.0f, 0.0f));
     m_pTimer->Set(0);
     m_pTimer->SetMax(MAX_TIME * 2);
