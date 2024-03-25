@@ -25,6 +25,7 @@
 #include "object_manager.h"
 #include "camera_manager.h"
 #include "player_manager.h"
+#include "enemy_manager.h"
 
 //===============================================
 // Ã“Iƒƒ“ƒo•Ï”
@@ -412,6 +413,7 @@ void CManager::ManagerRelease(void)
 	CObjectManager::Release();
 	CCameraManager::Release();
 	CPlayerManager::Release();
+	CEnemyManager::Release();
 }
 
 //===================================================
