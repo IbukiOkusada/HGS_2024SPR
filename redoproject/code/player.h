@@ -99,6 +99,7 @@ private:	// 自分だけがアクセス可能
 	void StateSet(void);
 	void Controller(void);
 	void Move(void);
+	void Adjust(void);
 
 	// メンバ変数
 	CPlayer *m_pPrev;			// 前のオブジェクトへのポインタ

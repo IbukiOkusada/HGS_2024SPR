@@ -18,6 +18,7 @@ class CFileLoad;
 class CClient;
 class CMeshDome;
 class CPause;
+class CScore;
 
 // マクロ定義
 #define NUM_FILTER	(2)
@@ -88,6 +89,7 @@ private:
 	CPause *m_pPause;			// ポーズ画面
 	WSADATA m_wsaData;
 	std::mutex m_mutex;
+	CScore* m_pScore;
 	bool m_bEnd;
 	float m_fOpenDoorUISin;
 	bool m_bPause;              // ポーズ
