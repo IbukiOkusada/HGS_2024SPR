@@ -282,23 +282,28 @@ void CEnemy::Move(void)
 		D3DXVECTOR3 posEnemy = GetPosition();
 		float rotPlayer;
 
-		rotPlayer = atan2f(posEnemy.x - posPlayer.x, posEnemy.z - posPlayer.z);
+		float length = D3DXVec3Length(&(posEnemy - posPlayer));
 
-		// ‰ñ“]•â³
-		if (rotPlayer > D3DX_PI)
+		if (length < 2000.0f)
 		{
-			rotPlayer -= D3DX_PI * 2.0f;
+			rotPlayer = atan2f(posEnemy.x - posPlayer.x, posEnemy.z - posPlayer.z);
+
+			// ‰ñ“]•â³
+			if (rotPlayer > D3DX_PI)
+			{
+				rotPlayer -= D3DX_PI * 2.0f;
+			}
+
+			if (rotPlayer < -D3DX_PI)
+			{
+				rotPlayer += D3DX_PI * 2.0f;
+			}
+
+			m_fRotDest = rotPlayer;
+
+			m_Info.move.x += -sinf(GetRotation().y + (D3DX_PI * 0.0f)) * fSpeed;
+			m_Info.move.z += -cosf(GetRotation().y + (D3DX_PI * 0.0f)) * fSpeed;
 		}
-
-		if (rotPlayer < -D3DX_PI)
-		{
-			rotPlayer += D3DX_PI * 2.0f;
-		}
-
-		m_fRotDest = rotPlayer;
-
-		m_Info.move.x += -sinf(GetRotation().y + (D3DX_PI * 0.0f)) * fSpeed;
-		m_Info.move.z += -cosf(GetRotation().y + (D3DX_PI * 0.0f)) * fSpeed;
 	}
 }
 
