@@ -125,5 +125,63 @@ void CParticle::Set(const D3DXVECTOR3& Defpos, const D3DXVECTOR3& Defmove, CEffe
 		}
 
 		break;
+
+	case CEffect::TYPE_SPEEDUP:	// 煙
+
+		for (int nCnt = 0; nCnt < 1; nCnt++)
+		{
+			// 座標の設定
+			pos = Defpos;
+			pos.x += static_cast<float>(rand() % 100 - 50);
+			pos.y += static_cast<float>(rand() % 10);
+			pos.z += static_cast<float>(rand() % 100 - 50);
+
+			//移動量の設定
+			move.x = sinf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.015f;
+			move.y = ((float)(rand() % 50)) * 0.2f;
+			move.z = cosf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.015f;
+
+			//色の設定
+			col = D3DXCOLOR(0.4f, 0.7f, 0.4f, 1.0f);
+
+			//半径の設定
+			fRadius = 30.0f;
+
+			//寿命の設定
+			fLife = 200.0f;
+
+			CEffect::Create(Defpos + move, move, col, fRadius, fLife, type);
+		}
+
+		break;
+
+	case CEffect::TYPE_SCOREUP:	// 煙
+
+		for (int nCnt = 0; nCnt < 1; nCnt++)
+		{
+			// 座標の設定
+			pos = Defpos;
+			pos.x += static_cast<float>(rand() % 100 - 50);
+			pos.y += static_cast<float>(rand() % 10);
+			pos.z += static_cast<float>(rand() % 100 - 50);
+
+			//移動量の設定
+			move.x = sinf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.025f;
+			move.y = ((float)(rand() % 50)) * 0.2f;
+			move.z = cosf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.025f;
+
+			//色の設定
+			col = D3DXCOLOR(0.7f, 0.4f, 0.4f, 1.0f);
+
+			//半径の設定
+			fRadius = 30.0f;
+
+			//寿命の設定
+			fLife = 200.0f;
+
+			CEffect::Create(Defpos + move, move, col, fRadius, fLife, type);
+		}
+
+		break;
 	}
 }

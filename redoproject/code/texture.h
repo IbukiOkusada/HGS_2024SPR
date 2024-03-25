@@ -25,6 +25,8 @@ public:	// 誰でもアクセス可能な定義
 	{
 		TYPE_EFFECT = 0,		// エフェクト
 		TYPE_STAR,				// 星
+		TYPE_SCORE,				// 星
+		TYPE_SPEED,				// 星
 		TYPE_MAX				   
 	};
 

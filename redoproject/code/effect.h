@@ -26,6 +26,8 @@ public:	// 誰でもアクセス可能な定義
 		TYPE_NONE = 0,			// 通常
 		TYPE_SMAKE,				// 煙
 		TYPE_FLOWERING,			// 開花
+		TYPE_SPEEDUP,			// 速度バフ
+		TYPE_SCOREUP,			// スコアバフ
 		TYPE_MAX
 	}TYPE;
 
