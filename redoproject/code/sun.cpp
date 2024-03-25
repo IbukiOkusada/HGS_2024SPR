@@ -9,6 +9,7 @@
 #include "manager.h"
 #include "time.h"
 #include "object2D.h"
+#include "flower.h"
 
 // マクロ定義
 #define SUN_SPEED (0.00436f)	//太陽の回転速度
@@ -75,6 +76,16 @@ void CSunTask::Update(void)
 	if (Rot.z * rotOld <= 0.0f)
 	{
 		CEnemy::Create(D3DXVECTOR3(700.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+		for (int nCnt = 0; nCnt < 7; nCnt++)
+		{
+			D3DXVECTOR3 pos = { 0.0f, -10.0f, 0.0f };
+			D3DXVECTOR3 rot = { 0.0f, 0.0f, 0.0f };
+			rot.y = static_cast<float>(rand() % 628 - 314) * 0.01f;
+			pos.x = static_cast<float>(rand() % 5000 - 2500);
+			pos.z = static_cast<float>(rand() % 5000 - 2500);
+			CFlower::Create(pos, rot);
+		}
 	}
 
 	// 位置代入

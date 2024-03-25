@@ -36,7 +36,7 @@
 // –³–¼–¼‘O‹óŠÔ‚ğ’è‹`
 namespace {
     
-    const int MAX_TIME = (60 * 1);	// Å‘åŠÔ
+    const int MAX_TIME = (90 * 1);	// Å‘åŠÔ
     const int MAX_STRING = (2048);
     const int DEF_PORT = (22333);
     const char* ADDRESSFILE	= "data\\TXT\\address.txt";
