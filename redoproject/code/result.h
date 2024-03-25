@@ -58,6 +58,7 @@ private:
 	CPlayer *m_ppPlayer;	// プレイヤーのポインタ
 	CCharacter* m_pLeg;
 	CCharacter* m_pBody;
+	CScore* m_pScore;
 	static int m_nScore;
 	static TYPE m_type;
 };

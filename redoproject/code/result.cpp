@@ -23,6 +23,7 @@
 #include "character.h"
 #include "motion.h"
 #include "model.h"
+#include "score.h"
 
 // Ã“Iƒƒ“ƒo•Ï”
 int CResult::m_nScore = 0;
@@ -103,6 +104,9 @@ HRESULT CResult::Init(void)
 	CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_RESULT);
 	//CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_RESULT);
 
+	m_pScore = CScore::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.2f - 10.0f * 4, 300.0f, 0.0f), 8, 1.0f, 60.0f, 120.0f);
+	m_pScore->AddScore(m_nScore);
+
 	return S_OK;
 }
 
@@ -123,6 +127,12 @@ void CResult::Uninit(void)
 		m_pLeg->Uninit();
 		delete m_pLeg;
 		m_pLeg = nullptr;
+	}
+
+	if (m_pScore != nullptr) {
+		m_pScore->Uninit();
+		delete m_pScore;
+		m_pScore = nullptr;
 	}
 
 	CFileLoad::Release();
