@@ -117,7 +117,7 @@ HRESULT CPlayer::Init(void)
 	}
 
 	// “·‘Ì‚ÌÝ’è
-	m_pBody = CCharacter::Create("data\\TXT\\motion_bee.txt");
+	m_pBody = CCharacter::Create("data\\TXT\\motion_sunflowerman.txt");
 	m_pBody->SetParent(m_pLeg->GetParts(2)->GetMtx());
 
 	if (m_pBody->GetMotion() != nullptr)
