@@ -45,6 +45,8 @@ public:
 	void Update(void);
 	void Draw(void);
 	static void SetScore(const int nScore) { m_nScore = nScore; }
+	static TYPE GetType(void) { return m_type; }
+	static void SetType(const TYPE type) { m_type = type; }
 
 private:
 
@@ -54,7 +56,10 @@ private:
 	CTime *m_pTime;			// タイマー
 	CObject2D *m_pObjClear;	// clearしたかどうか
 	CPlayer *m_ppPlayer;	// プレイヤーのポインタ
+	CCharacter* m_pLeg;
+	CCharacter* m_pBody;
 	static int m_nScore;
+	static TYPE m_type;
 };
 
 #endif
