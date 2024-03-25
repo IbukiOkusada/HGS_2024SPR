@@ -99,5 +99,31 @@ void CParticle::Set(const D3DXVECTOR3& Defpos, const D3DXVECTOR3& Defmove, CEffe
 		}
 
 		break;
+
+	case CEffect::TYPE_FLOWERING:	// ‰Œ
+
+		for (int nCnt = 0; nCnt < 1; nCnt++)
+		{
+			// À•W‚ÌÝ’è
+			pos = Defpos;
+
+			//ˆÚ“®—Ê‚ÌÝ’è
+			move.x = sinf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.09f;
+			move.y = ((float)(rand() % 50)) * 0.3f;
+			move.z = cosf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.09f;
+
+			//F‚ÌÝ’è
+			col = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+
+			//”¼Œa‚ÌÝ’è
+			fRadius = 20.0f;
+
+			//Žõ–½‚ÌÝ’è
+			fLife = 100.0f;
+
+			CEffect::Create(Defpos + move, move, col, fRadius, fLife, type);
+		}
+
+		break;
 	}
 }

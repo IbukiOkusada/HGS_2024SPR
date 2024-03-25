@@ -40,6 +40,7 @@
 #include "score.h"
 #include "sun.h"
 #include "result.h"
+#include "particle.h"
 
 //===============================================
 // –³–¼–¼‘O‹óŠÔ
@@ -631,6 +632,8 @@ void CPlayer::AddScore(void){
 
 	// ‰ÁZ
 	m_pScore->AddScore(ADDSCORE + m_nScoreBoost);
+	D3DXVECTOR3 pos = { m_pBody->GetParts(0)->GetMtx()->_41,m_pBody->GetParts(0)->GetMtx()->_42, m_pBody->GetParts(0)->GetMtx()->_43 };
+	CParticle::Create(pos, CEffect::TYPE_FLOWERING);
 }
 //===============================================
 // ŠJ‰Ôó‘Ôİ’è
