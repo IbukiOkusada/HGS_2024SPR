@@ -154,7 +154,9 @@ HRESULT CGame::Init(void)
             m_nNumPlayer = 1;
         }
 
-        CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+        CPlayer *pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+        m_pScore = CScore::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 40.0f * 4, 50.0f, 0.0f), 8, 1.0f, 20.0f, 70.0f);
+        pPlayer->SetScore(m_pScore);
     }
         break;
 
@@ -180,7 +182,6 @@ HRESULT CGame::Init(void)
 
     //CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_GAME);
     CMeshDome::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 15000.0f, 3000.0f, 3, 8, 8);
-    m_pScore = CScore::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 40.0f * 4, 50.0f, 0.0f), 8, 1.0f, 20.0f, 70.0f);
 
     return S_OK;
 }

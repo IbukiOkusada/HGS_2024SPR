@@ -15,6 +15,7 @@
 // 前方宣言
 class CWaist;
 class CCharacter;
+class CScore;
 
 // マクロ定義
 #define MAX_ITEM  (1280)  // 所持できるアイテムの最大数
@@ -46,6 +47,15 @@ private:	// 自分だけがアクセス可能な定義
 		STATE_DAMAGE,		// ダメージ状態
 		STATE_DEATH,		// 死亡状態
 		STATE_MAX
+	};
+
+	// 頭部状態
+	enum HEADSTATE
+	{
+		HEADSTATE_NORMAL = 0,	// つぼみ
+		HEADSTATE_FLOWERING,	// 開花
+		HEADSTATE_DAMAGE,		// ダメージ
+		HEADSTATE_MAX
 	};
 
 	// 情報構造体
@@ -82,6 +92,7 @@ public:	// 誰でもアクセス可能
 	void SetDraw(bool bDraw);
 	void SetNext(CPlayer* pNext) { m_pNext = pNext; }
 	void SetPrev(CPlayer* pPrev) { m_pPrev = pPrev; }
+	void SetScore(CScore* pScore) { m_pScore = pScore; }
 	void SetRotDiff(float fDiff) { m_fRotDest = fDiff; }
 
 	// メンバ関数(取得)
@@ -100,17 +111,26 @@ private:	// 自分だけがアクセス可能
 	void Controller(void);
 	void Move(void);
 	void Adjust(void);
+	void BodySet(void);
+	bool BodyCheck(CCharacter* pBody);
+	void AddScore(void);
 
 	// メンバ変数
 	CPlayer *m_pPrev;			// 前のオブジェクトへのポインタ
 	CPlayer *m_pNext;			// 次のオブジェクトへのポインタ
+	CCharacter* m_pBody;		// 上半身
+	CCharacter* m_pLeg;			// 下半身
 	SInfo m_Info;				// 自分自身の情報
+	CScore* m_pScore;			// 自身のスコア
 	float m_fRotMove;			// 現在の角度
 	float m_fRotDiff;			// 目的の角度
 	float m_fRotDest;			// 角度計算
 	bool m_bMove;				// 移動したか否か
+	int m_nLife;				// 体力
 	int m_nId;					// ID
+	int m_nMotion;
 	TYPE m_type;
+	HEADSTATE m_headState;
 };
 
 #endif
