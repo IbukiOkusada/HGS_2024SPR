@@ -162,6 +162,7 @@
     <ClCompile Include="code\effect.cpp" />
     <ClCompile Include="code\fade.cpp" />
     <ClCompile Include="code\fileload.cpp" />
+    <ClCompile Include="code\flower.cpp" />
     <ClCompile Include="code\game.cpp" />
     <ClCompile Include="code\input.cpp" />
     <ClCompile Include="code\light.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="code\effect.h" />
     <ClInclude Include="code\fade.h" />
     <ClInclude Include="code\fileload.h" />
+    <ClInclude Include="code\flower.h" />
     <ClInclude Include="code\game.h" />
     <ClInclude Include="code\input.h" />
     <ClInclude Include="code\light.h" />
