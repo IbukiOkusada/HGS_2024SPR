@@ -35,39 +35,6 @@ public:
 		TYPE_MAX
 	};
 
-
-	// アクション列挙型
-	enum ACTION
-	{
-		ACTION_NEUTRAL = 0,		// 待機
-		ACTION_WALK,			// 歩行
-		ACTION_JUMP,			// ジャンプ
-		ACTION_SLIDING,			// スライディング
-		ACTION_WALLSTAND,		// 壁ずり
-		ACTION_WALLKICK,		// 壁キック
-		ACTION_SLIDEJUMP,		// しゃがみジャンプ
-		ACTION_NORMALATK,		// 攻撃
-		ACTION_WALLDUSH,		// 壁走り
-		ACTION_CEILINGDUSH,		// 天井走り
-		ACTION_KICKUP,			// 蹴りあがり
-		ACTION_AXEKICK,			// かかと落とし
-		ACTION_RIDERKICK,		// ライダーキック
-		ACTION_TITLENEUTRAL,	// タイトル待機
-		ACTION_DAMAGE,			// ダメージ
-		ACTION_DEATH,			// ダウン
-		ACTION_MAX
-	};
-
-	// 攻撃種類
-	enum ATK
-	{
-		ATK_NORMAL = 0,	// 通常
-		ATK_AXEKICK,	// かかと落とし
-		ATK_RIDERKICK,	// ライダーキック
-		ATK_SLOWKICK,	// スローライダーキック
-		ATK_MAX
-	};
-
 private:	// 自分だけがアクセス可能な定義
 
 	// 状態列挙型
@@ -75,9 +42,9 @@ private:	// 自分だけがアクセス可能な定義
 	{
 		STATE_APPEAR = 0,	// 出現状態
 		STATE_NORMAL,		// 通常状態
+		STATE_OPEN,			// 開花状態
 		STATE_DAMAGE,		// ダメージ状態
 		STATE_DEATH,		// 死亡状態
-		STATE_SPAWN,		// 復活中状態
 		STATE_MAX
 	};
 
