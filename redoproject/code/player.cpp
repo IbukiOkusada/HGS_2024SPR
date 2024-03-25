@@ -41,6 +41,7 @@
 #include "sun.h"
 #include "result.h"
 #include "particle.h"
+#include "number.h"
 
 //===============================================
 // –³–¼–¼‘O‹óŠÔ
@@ -98,6 +99,8 @@ CPlayer::CPlayer()
 	m_nScoreBoost = 0;
 	m_nScoreUpCounter = 0;
 	m_pArrow = nullptr;
+	m_pObj = nullptr;
+	m_pLife = nullptr;
 
 	CPlayerManager::GetInstance()->ListIn(this);
 }
@@ -145,6 +148,12 @@ HRESULT CPlayer::Init(void)
 	m_type = TYPE_NONE;
 	m_headState = HEADSTATE_NORMAL;
 	m_nLife = SETLIFE;
+	m_pObj = CObject2D::Create(D3DXVECTOR3(100.0f, 100.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 7);
+	m_pObj->SetSize(100.0f, 40.0f);
+	m_pObj->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\life000.png"));
+	m_pLife = CNumber::Create(D3DXVECTOR3(220.0f, 100.0f, 0.0f), 22.0f, 40.0f);
+	m_pLife->GetObject2D()->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\number004.png"));
+	m_pLife->SetIdx(m_nLife);
 
 	return S_OK;
 }
@@ -180,6 +189,17 @@ void CPlayer::Uninit(void)
 		m_pLeg = nullptr;
 	}
 
+	if (m_pObj != nullptr) {
+		m_pObj->Uninit();
+		m_pObj = nullptr;
+	}
+
+	if (m_pLife != nullptr) {
+		m_pLife->Uninit();
+		delete m_pLife;
+		m_pLife = nullptr;
+	}
+
 	// ”pŠü
 	Release();
 }
@@ -191,7 +211,6 @@ void CPlayer::Update(void)
 {	
 	// ‘O‰ñ‚ÌÀ•W‚ðŽæ“¾
 	m_Info.posOld = GetPosition();
-
 	StateSet();	
 
 	{
@@ -442,6 +461,7 @@ void CPlayer::StateSet(void)
 		{
 			m_Info.fStateCounter = DAMAGE_APPEAR;
 			CResult::SetScore(m_pScore->GetScore());
+			CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
 		}
 	}
 		break;
@@ -715,6 +735,9 @@ void CPlayer::Damage(void)
 	if (m_nLife <= 0) {
 		m_Info.state = STATE_DEATH;
 		CResult::SetType(CResult::TYPE_MULTI_LOSE);
+	}
+	else {
+		m_pLife->SetIdx(m_nLife);
 	}
 }
 

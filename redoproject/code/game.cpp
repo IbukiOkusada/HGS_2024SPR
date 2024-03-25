@@ -124,7 +124,7 @@ HRESULT CGame::Init(void)
             m_nNumPlayer = 1;
         }
 
-        CPlayer *pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+        CPlayer *pPlayer = CPlayer::Create(D3DXVECTOR3(-1400.0f, 0.0f, -1300.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.75f, 0.0f));
 
         m_pScore = CScore::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.2f - 40.0f * 4, 30.0f, 0.0f), 8, 1.0f, 20.0f, 60.0f);
         pPlayer->SetScore(m_pScore);

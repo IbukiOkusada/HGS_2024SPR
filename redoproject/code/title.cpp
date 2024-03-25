@@ -104,7 +104,7 @@ void CTitle::Update(void)
 	if (m_bPush) {
 		m_nCounterTutorial--;
 		if (m_nCounterTutorial <= 0) {
-			CManager::GetInstance()->GetFade()->Set(CScene::MODE_GAME);
+			CManager::GetInstance()->GetFade()->Set(CScene::MODE_TUTORIAL);
 		}
 	}
 	else {

@@ -94,7 +94,7 @@ void CTutorial::Uninit(void)
 //===============================================
 void CTutorial::Update(void)
 {
-	if (CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_START, 0) || CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_RETURN))
+	if (CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_A, 0) || CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_RETURN))
 	{
 		CManager::GetInstance()->GetFade()->Set(CScene::MODE_GAME);
 	}
