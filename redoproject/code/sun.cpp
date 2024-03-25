@@ -58,7 +58,8 @@ void CSunTask::Update(void)
 {
 	// ‘¾—z‚ÌˆÊ’uŒˆ’è
 	D3DXVECTOR3 SunPos;
-	SunPos = PosRelativeMtx(D3DXVECTOR3(0.0f, 0.0f, 0.0f), Rot, D3DXVECTOR3(13000.0f, 0.0f, 0.0f));
+	SunPos = PosRelativeMtx(D3DXVECTOR3(0.0f, 0.0f, 0.0f), Rot, D3DXVECTOR3(8000.0f, 0.0f, 0.0f));
+	SunPos.y += 1400.0f;
 	float rotOld = Rot.z;
 
 	// ‰ñ“]‚³‚¹‚é
