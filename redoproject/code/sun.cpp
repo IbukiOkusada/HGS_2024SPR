@@ -79,7 +79,7 @@ void CSunTask::Update(void)
 
 	// ˆÊ’u‘ã“ü
 	SunObject->SetPosition(SunPos);
-	SunObject->SetRotation(D3DXVECTOR3(0.0f, -Rot.z + (D3DX_PI * -0.5f), 0.0f));
+	SunObject->SetRotation(D3DXVECTOR3(0.0f, -Rot.z + (D3DX_PI * -0.5f), -Rot.z * 4.0f));
 }
 
 //==========================================================

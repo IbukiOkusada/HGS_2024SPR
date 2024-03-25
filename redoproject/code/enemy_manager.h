@@ -33,16 +33,19 @@ public:	// 誰でもアクセス可能
 	void ListIn(CEnemy* pPlayer);
 	void ListOut(CEnemy* pPlayer);
 	int GetNum(void) { return m_nNum; }
+	int GetSleep(void) { return m_nCntSleep; }
+	void SetSleep(int nCntSleep) { m_nCntSleep = nCntSleep; }
 	bool Hit(D3DXVECTOR3& pos, const float fRange, const float fHeight, const int nDamage);
 
 private:	// 自分だけがアクセス可能
 
 	// メンバ関数
-	// 
+
 	// メンバ変数
 	CEnemy* m_pTop;	// 先頭
 	CEnemy* m_pCur;	// 最後尾
 	int m_nNum;
+	int m_nCntSleep;
 	static CEnemyManager* m_pInstance;	// インスタンス
 };
 

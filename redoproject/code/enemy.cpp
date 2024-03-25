@@ -274,8 +274,8 @@ void CEnemy::Move(void)
 	float fSpeed = MOVE;	// 移動量
 
 	//エネミーの更新
-
-	if (CPlayerManager::GetInstance()->GetTop())
+	
+	if (CPlayerManager::GetInstance()->GetTop() && CEnemyManager::GetInstance()->GetSleep() <= 0)
 	{
 		D3DXVECTOR3 posPlayer = CPlayerManager::GetInstance()->GetTop()->GetPosition();
 		D3DXVECTOR3 posEnemy = GetPosition();
@@ -299,6 +299,8 @@ void CEnemy::Move(void)
 		m_Info.move.x += -sinf(GetRotation().y + (D3DX_PI * 0.0f)) * fSpeed;
 		m_Info.move.z += -cosf(GetRotation().y + (D3DX_PI * 0.0f)) * fSpeed;
 	}
+
+	CEnemyManager::GetInstance()->Update();
 }
 
 //===============================================

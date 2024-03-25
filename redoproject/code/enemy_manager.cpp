@@ -19,6 +19,7 @@ CEnemyManager::CEnemyManager()
 	m_pCur = nullptr;
 	m_pTop = nullptr;
 	m_nNum = 0;
+	m_nCntSleep = 0;
 }
 
 //==========================================================
@@ -50,7 +51,12 @@ void CEnemyManager::Uninit(void)
 //==========================================================
 void CEnemyManager::Update(void)
 {
+	m_nCntSleep--;
 
+	if (m_nCntSleep < 0)
+	{
+		m_nCntSleep = 0;
+	}
 }
 
 //==========================================================
